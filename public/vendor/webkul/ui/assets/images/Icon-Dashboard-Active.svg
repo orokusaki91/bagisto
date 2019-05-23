@@ -1,15 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
-    <title>Icon-Dashboard-Active</title>
-    <desc>Created with Sketch.</desc>
-    <defs></defs>
-    <g id="Icon-Dashboard-Active" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g transform="translate(10.000000, 1.000000)">
-            <rect id="Rectangle-2" stroke="#0041FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" x="0" y="9" width="28" height="28"></rect>
-            <circle id="Oval" fill="#FFFFFF" cx="28" cy="9" r="9"></circle>
-            <circle id="Oval" stroke="#0041FF" stroke-width="2" cx="28" cy="9" r="4"></circle>
-            <polyline id="Path-5" stroke="#0041FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" points="7 26.8225098 10.6303711 22.1315918 15.5270996 25.3210449 21.5498047 18"></polyline>
-        </g>
-    </g>
-</svg>
+<?xml version="1.0" standalone="no"?><!-- Generator: Gravit.io --><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="isolation:isolate" viewBox="0 0 48 48" width="48px" height="48px"><defs><clipPath id="_clipPath_5JyoT2dpbcPovZzwzPHHI0UXRDSq2k9n"><rect width="48" height="48"/></clipPath></defs><g clip-path="url(#_clipPath_5JyoT2dpbcPovZzwzPHHI0UXRDSq2k9n)"><g><rect x="10" y="10" width="28" height="28" transform="matrix(1,0,0,1,0,0)" fill="none" vector-effect="non-scaling-stroke" stroke-width="2" stroke="rgb(255,153,0)" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="2"/><circle vector-effect="non-scaling-stroke" cx="38" cy="10" r="9" fill="rgb(255,255,255)"/><circle vector-effect="non-scaling-stroke" cx="38" cy="10" r="4" fill="none" stroke-width="2" stroke="rgb(255,153,0)" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4"/><mask id="_mask_VRTiUEpv5cqnYGih7sHACjVZpdBAQItO" x="-200%" y="-200%" width="400%" height="400%"><rect x="-200%" y="-200%" width="400%" height="400%" style="fill:white;"/><path d=" M 17 27.823 L 20.63 23.132 L 25.527 26.321 L 31.55 19" fill-rule="evenodd" fill="black" stroke="none"/></mask><path d=" M 17 27.823 L 20.63 23.132 L 25.527 26.321 L 31.55 19" fill-rule="evenodd" fill="none" mask="url(#_mask_VRTiUEpv5cqnYGih7sHACjVZpdBAQItO)" vector-effect="non-scaling-stroke" stroke-width="4" stroke="rgb(255,153,0)" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="4"/><path d=" M 17 27.823 L 20.63 23.132 L 25.527 26.321 L 31.55 19" fill-rule="evenodd" fill="none"/></g></g></svg>

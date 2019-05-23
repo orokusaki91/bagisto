@@ -1,11 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
-    <title>Accordion-Arrow-Up</title>
-    <desc>Created with Sketch.</desc>
-    <defs></defs>
-    <g id="Accordion-Arrow-Up" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <rect id="Rectangle-2" fill="#0041FF" x="0" y="0" width="24" height="24" rx="12"></rect>
-        <polyline id="Path-3" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" transform="translate(12.000000, 11.000000) scale(-1, 1) rotate(-90.000000) translate(-12.000000, -11.000000) " points="10 7 14 11 10 15"></polyline>
-    </g>
-</svg>
+<?xml version="1.0" standalone="no"?><!-- Generator: Gravit.io --><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="isolation:isolate" viewBox="0 0 24 24" width="24px" height="24px"><defs><clipPath id="_clipPath_aLyf4E1edtOUthTFZ5JaA2tVwZDodTqn"><rect width="24" height="24"/></clipPath></defs><g clip-path="url(#_clipPath_aLyf4E1edtOUthTFZ5JaA2tVwZDodTqn)"><path d="M 12 0 L 12 0 C 18.623 0 24 5.377 24 12 L 24 12 C 24 18.623 18.623 24 12 24 L 12 24 C 5.377 24 0 18.623 0 12 L 0 12 C 0 5.377 5.377 0 12 0 Z" style="stroke:none;fill:#FF9900;stroke-miterlimit:10;"/><mask id="_mask_I3mPoes1IQQPxLAO8h14rRKtQFy1sa7a" x="-200%" y="-200%" width="400%" height="400%"><rect x="-200%" y="-200%" width="400%" height="400%" style="fill:white;"/><path d=" M 16 13 L 12 9 L 8 13" fill-rule="evenodd" fill="black" stroke="none"/></mask><path d=" M 16 13 L 12 9 L 8 13" fill-rule="evenodd" fill="none" mask="url(#_mask_I3mPoes1IQQPxLAO8h14rRKtQFy1sa7a)" vector-effect="non-scaling-stroke" stroke-width="6" stroke="rgb(255,255,255)" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="4"/><path d=" M 16 13 L 12 9 L 8 13" fill-rule="evenodd" fill="none"/></g></svg>

@@ -246,3 +246,20 @@ section.product-detail div.layouter .form-container .details .accordian .accordi
 .checkout-process .col-main ul.checkout-steps li.active .decorator {
 	border-color: #333;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+/* ADMIN PANEL */
+
+.navbar-top, .navbar-left {
+		background: #333;
+}
