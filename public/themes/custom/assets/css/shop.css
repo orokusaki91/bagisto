@@ -243,3 +243,6 @@ section.product-detail div.layouter .form-container .details .accordian .accordi
 	color:red;
 }
 
+.checkout-process .col-main ul.checkout-steps li.active .decorator {
+	border-color: #333;
+}
