@@ -79,7 +79,7 @@
                                     <label for="user_password" class="required">User Password</label>
                                     <input type="text" name="user_password" class="control"
                                     placeholder="database password"
-                                    data-validation="length required" data-validation-length="max50">
+                                    data-validation="length required" data-validation-length="max100">
                                 </div>
                             </div>
                         </div>
