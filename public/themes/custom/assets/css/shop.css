@@ -257,9 +257,14 @@ section.product-detail div.layouter .form-container .details .accordian .accordi
 		color: #f90;
 }
 
+.product-price .price-label {
+	margin: 20px 0;
+	display: block;
+}
 
-
-
+.final-price {
+	display: block;
+}
 
 
 /* ADMIN PANEL */
@@ -272,8 +277,10 @@ section.product-detail div.layouter .form-container .details .accordian .accordi
 
 
 
+
 @media screen and (max-width: 768px) {
 	.header .header-bottom .nav a {
 		border-right: none;
 	}
 }
+

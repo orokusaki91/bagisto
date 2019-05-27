@@ -92,3 +92,9 @@
 	margin-right:10px;
 	padding:5px;
 }
+
+
+.image-wrapper .image-item.has-image, .image-wrapper .image-item img.preview {
+	cursor: pointer !important;
+}
+
