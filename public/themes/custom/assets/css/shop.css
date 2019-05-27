@@ -251,7 +251,7 @@ section.product-detail div.layouter .form-container .details .accordian .accordi
 
 
 .header .header-top div.right-content .right-content-menu ul.dropdown-list li:hover {
-		background-color: #333;
+		
 }
 .header .header-top div.right-content .right-content-menu ul.dropdown-list li:hover a {
 		color: #f90;
@@ -270,3 +270,10 @@ section.product-detail div.layouter .form-container .details .accordian .accordi
 
 
 
+
+
+@media screen and (max-width: 768px) {
+	.header .header-bottom .nav a {
+		border-right: none;
+	}
+}
