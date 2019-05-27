@@ -81,7 +81,7 @@
 	color:#f90;
 }
 .table table tbody tr:hover td {
-	background:#8e8e8e;
+	background:#d8d8d8;
 }
 .content-container .content .page-header .page-action a:hover {
 	color:#f90;
@@ -91,7 +91,4 @@
 .table table tbody td.actions .icon {
 	margin-right:10px;
 	padding:5px;
-}
-.table table tbody td.actions .icon:hover {
-	background-color:#fff;
 }
