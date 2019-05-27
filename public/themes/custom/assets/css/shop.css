@@ -259,12 +259,10 @@ section.product-detail div.layouter .form-container .details .accordian .accordi
 
 .product-price .price-label {
 	margin: 20px 0;
-	display: block;
+	margin-right: 5px;
 }
 
-.final-price {
-	display: block;
-}
+
 
 
 /* ADMIN PANEL */
