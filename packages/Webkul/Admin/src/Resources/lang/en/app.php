@@ -816,7 +816,7 @@ return [
     ],
 
     'footer' => [
-        'copy-right' => '© Copyright 2018 Webkul Software, All rights reserved.'
+        'copy-right' => '© Copyright DGQ, All rights reserved.'
     ],
 
     'admin' => [
