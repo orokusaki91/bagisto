@@ -7,7 +7,7 @@
                         @if ($logo = core()->getCurrentChannel()->logo_url)
                             <img class="logo" src="{{ $logo }}" />
                         @else
-                            <img class="logo" src="{{ bagisto_asset('images/logo.svg') }}" />
+                            <img class="logo" src="{{ bagisto_asset('images/logo.png') }}" />
                         @endif
                     </a>
                 </li>
@@ -44,6 +44,28 @@
             <span class="search-box"><span class="icon icon-search" id="search"></span></span>
 
             <ul class="right-content-menu">
+
+                @if(core()->getCurrentChannel()->locales->count() > 1)
+                    <li class="currency-switcher">
+                        <span class="dropdown-toggle">
+                            {{ core()->getCurrentChannel()->locales->first()->name }}
+
+                            <i class="icon arrow-down-icon"></i>
+                        </span>
+
+                        <ul class="dropdown-list currency">
+                            @foreach (core()->getCurrentChannel()->locales as $locale)
+                                <li>
+                                    @if (isset($serachQuery))
+                                        <a href="?{{ $serachQuery }}&locale={{ $locale->code }}">{{ $locale->name }}</a>
+                                    @else
+                                        <a href="?locale={{ $locale->code }}">{{ $locale->name }}</a>
+                                    @endif
+                                </li>
+                            @endforeach
+                        </ul>
+                    </li>
+                @endif
 
                 {!! view_render_event('bagisto.shop.layout.header.currency-item.before') !!}
 
