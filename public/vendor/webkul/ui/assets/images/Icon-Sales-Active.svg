@@ -1,1 +1,14 @@
-<?xml version="1.0" standalone="no"?><!-- Generator: Gravit.io --><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="isolation:isolate" viewBox="0 0 48 48" width="48px" height="48px"><defs><clipPath id="_clipPath_r8h647s7BQswJW6XUdDJUQYNUanWeZGi"><rect width="48" height="48"/></clipPath></defs><g clip-path="url(#_clipPath_r8h647s7BQswJW6XUdDJUQYNUanWeZGi)"><g><rect x="10" y="26" width="6" height="12" transform="matrix(1,0,0,1,0,0)" fill="none" vector-effect="non-scaling-stroke" stroke-width="2" stroke="rgb(255,153,0)" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="2"/><rect x="21" y="18" width="6" height="20" transform="matrix(1,0,0,1,0,0)" fill="none" vector-effect="non-scaling-stroke" stroke-width="2" stroke="rgb(255,153,0)" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="2"/><rect x="32" y="10" width="6" height="28" transform="matrix(1,0,0,1,0,0)" fill="none" vector-effect="non-scaling-stroke" stroke-width="2" stroke="rgb(255,153,0)" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="2"/></g></g></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50 (54983) - http://www.bohemiancoding.com/sketch -->
+    <title>Icon-Sales-Active</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Icon-Sales-Active" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g transform="translate(10.000000, 10.000000)" id="Rectangle-2" stroke="#0041FF" stroke-width="2">
+            <rect x="0" y="16" width="6" height="12"></rect>
+            <rect x="11" y="8" width="6" height="20"></rect>
+            <rect x="22" y="0" width="6" height="28"></rect>
+        </g>
+    </g>
+</svg>

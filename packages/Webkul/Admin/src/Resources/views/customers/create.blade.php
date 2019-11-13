@@ -66,7 +66,7 @@
 
                     <div class="control-group" :class="[errors.has('phone') ? 'has-error' : '']">
                         <label for="phone">{{ __('admin::app.customers.customers.phone') }}</label>
-                        <input type="text" class="control" name="phone" v-validate="'numeric|max:10'" value="{{ old('phone') }}" data-vv-as="&quot;{{ __('admin::app.customers.customers.phone') }}&quot;">
+                        <input type="text" class="control" name="phone" value="{{ old('phone') }}" data-vv-as="&quot;{{ __('admin::app.customers.customers.phone') }}&quot;">
                         <span class="control-error" v-if="errors.has('phone')">@{{ errors.first('phone') }}</span>
                     </div>
 
@@ -78,17 +78,6 @@
                         @endforeach
                         </select>
                     </div>
-
-                    <div class="control-group" :class="[errors.has('channel_id') ? 'has-error' : '']">
-                        <label for="channel" >{{ __('admin::app.customers.customers.channel_name') }}</label>
-                        <select  class="control" name="channel_id" v-validate="'required'" data-vv-as="&quot;{{ __('shop::app.customers.customers.channel_name') }}&quot;">
-                        @foreach ($channelName as $channel)
-                            <option value="{{ $channel->id }}"> {{ $channel->name}} </>
-                        @endforeach
-                        </select>
-                        <span class="control-error" v-if="errors.has('channel_id')">@{{ errors.first('channel_id') }}</span>
-                    </div>
-
                 </div>
             </div>
         </form>

@@ -1,8 +1,7 @@
-window.jQuery = window.$ = $ = require("jquery");
+require("./bootstrap");
+
 window.Vue = require("vue");
 window.VeeValidate = require("vee-validate");
-window.axios = require("axios");
-require("./bootstrap");
 
 Vue.use(VeeValidate);
 Vue.prototype.$http = axios
@@ -40,6 +39,8 @@ $(document).ready(function () {
                         e.target.submit();
                     } else {
                         this.toggleButtonDisable(false);
+
+                        eventBus.$emit('onFormError')
                     }
                 });
             },
@@ -52,8 +53,7 @@ $(document).ready(function () {
                 }
             },
 
-            addServerErrors() {
-                var scope = null;
+            addServerErrors(scope = null) {
                 for (var key in serverErrors) {
                     var inputNames = [];
                     key.split('.').forEach(function(chunk, index) {

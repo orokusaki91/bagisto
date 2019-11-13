@@ -31,7 +31,7 @@ class StandardController extends Controller
     /**
      * Create a new controller instance.
      *
-     * @param  Webkul\Attribute\Repositories\OrderRepository  $orderRepository
+     * @param  \Webkul\Attribute\Repositories\OrderRepository  $orderRepository
      * @return void
      */
     public function __construct(
@@ -47,7 +47,7 @@ class StandardController extends Controller
     /**
      * Redirects to the paypal.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
     public function redirect()
     {

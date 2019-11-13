@@ -2,72 +2,66 @@
 
 namespace Webkul\Customer\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Webkul\Customer\Repositories\CustomerRepository;
-use Webkul\Product\Repositories\ProductReviewRepository as ProductReview;
-use Webkul\Customer\Models\Customer;
-use Auth;
 use Hash;
+use Webkul\Customer\Repositories\CustomerRepository;
+use Webkul\Product\Repositories\ProductReviewRepository;
 
 /**
- * Customer controlller for the customer basically for the tasks of customers which will be done after customer authentication.
+ * Customer controlller for the customer basically for the tasks of customers which will be
+ * done after customer authentication.
  *
- * @author    Prashant Singh <prashant.singh852@webkul.com>
+ * @author  Prashant Singh <prashant.singh852@webkul.com>
  * @copyright 2018 Webkul Software Pvt Ltd (http://www.webkul.com)
  */
 class CustomerController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Contains route related configuration
      *
-     * @return \Illuminate\Http\Response
+     * @var array
      */
     protected $_config;
 
     /**
      * CustomerRepository object
      *
-     * @var array
+     * @var Object
     */
-    protected $customer;
+    protected $customerRepository;
 
     /**
      * ProductReviewRepository object
      *
      * @var array
     */
-    protected $productReview;
+    protected $productReviewRepository;
 
     /**
-     * Create a new Repository instance.
+     * Create a new controller instance.
      *
-     * @param  Webkul\Customer\Repositories\CustomerRepository     $customer
-     * @param  Webkul\Product\Repositories\ProductReviewRepository $productReview
+     * @param  \Webkul\Customer\Repositories\CustomerRepository $customer
+     * @param  \Webkul\Product\Repositories\ProductReviewRepository $productReview
      * @return void
     */
-    public function __construct(
-        CustomerRepository $customer,
-        ProductReview $productReview
-    )
+    public function __construct(CustomerRepository $customerRepository, ProductReviewRepository $productReviewRepository)
     {
         $this->middleware('customer');
 
         $this->_config = request('_config');
 
-        $this->customer = $customer;
+        $this->customerRepository = $customerRepository;
 
-        $this->productReview = $productReview;
+        $this->productReviewRepository = $productReviewRepository;
     }
 
     /**
      * Taking the customer to profile details page
      *
-     * @return View
+     * @return \Illuminate\View\View
      */
     public function index()
     {
-        $customer = $this->customer->find(auth()->guard('customer')->user()->id);
+        $customer = $this->customerRepository->find(auth()->guard('customer')->user()->id);
 
         return view($this->_config['view'], compact('customer'));
     }
@@ -75,11 +69,11 @@ class CustomerController extends Controller
     /**
      * For loading the edit form page.
      *
-     * @return View
+     * @return \Illuminate\View\View
      */
-    public function editIndex()
+    public function edit()
     {
-        $customer = $this->customer->find(auth()->guard('customer')->user()->id);
+        $customer = $this->customerRepository->find(auth()->guard('customer')->user()->id);
 
         return view($this->_config['view'], compact('customer'));
     }
@@ -87,9 +81,9 @@ class CustomerController extends Controller
     /**
      * Edit function for editing customer profile.
      *
-     * @return Redirect.
+     * @return response
      */
-    public function edit()
+    public function update()
     {
         $id = auth()->guard('customer')->user()->id;
 
@@ -105,9 +99,8 @@ class CustomerController extends Controller
 
         $data = collect(request()->input())->except('_token')->toArray();
 
-        if ($data['date_of_birth'] == "") {
+        if ($data['date_of_birth'] == "")
             unset($data['date_of_birth']);
-        }
 
         if ($data['oldpassword'] != "" || $data['oldpassword'] != null) {
             if(Hash::check($data['oldpassword'], auth()->guard('customer')->user()->password)) {
@@ -121,56 +114,68 @@ class CustomerController extends Controller
             unset($data['password']);
         }
 
-        if ($this->customer->update($data, $id)) {
+        if ($this->customerRepository->update($data, $id)) {
             Session()->flash('success', trans('shop::app.customer.account.profile.edit-success'));
 
-            return redirect()->back();
+            return redirect()->route($this->_config['redirect']);
         } else {
             Session()->flash('success', trans('shop::app.customer.account.profile.edit-fail'));
 
-            return redirect()->back();
+            return redirect()->back($this->_config['redirect']);
         }
     }
 
     /**
-     * Load the view for the customer account panel, showing orders in a table.
+     * Remove the specified resource from storage.
      *
-     * @return Mixed
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
-    public function orders()
+    public function destroy($id)
     {
-        return view($this->_config['view']);
-    }
+        $id = auth()->guard('customer')->user()->id;
 
-    /**
-     * Load the view for the customer account panel, showing wishlist items.
-     *
-     * @return Mixed
-     */
-    public function wishlist()
-    {
-        return view($this->_config['view']);
+        $data = request()->all();
+
+        $customerRepository = $this->customerRepository->findorFail($id);
+
+        $orders = $customerRepository->all_orders->whereIn('status', ['pending', 'processing'])->first();
+
+        if ( $orders ) {
+            session()->flash('error', trans('admin::app.response.order-pending'));
+
+            return redirect()->route($this->_config['redirect']);
+        }
+
+        try {
+            if ( Hash::check($data['password'], $customerRepository->password) ) {
+
+                $this->customerRepository->delete($id);
+
+                session()->flash('success', trans('admin::app.response.delete-success', ['name' => 'Customer']));
+
+                return redirect()->route('customer.session.index');
+            } else {
+                session()->flash('error', trans('shop::app.customer.account.address.delete.wrong-password'));
+            }
+
+            return redirect()->route('customer.session.index');
+        } catch(\Exception $e) {
+            session()->flash('error', trans('admin::app.response.delete-failed', ['name' => 'Customer']));
+
+            return redirect()->route($this->_config['redirect']);
+        }
     }
 
     /**
      * Load the view for the customer account panel, showing approved reviews.
      *
-     * @return Mixed
+     * @return \Illuminate\View\View
      */
     public function reviews()
     {
-        $reviews = $this->productReview->getCustomerReview();
+        $reviews = $this->productReviewRepository->getCustomerReview();
 
         return view($this->_config['view'], compact('reviews'));
-    }
-
-    /**
-     * Load the view for the customer account panel, shows the customer address.
-     *
-     * @return Mixed
-     */
-    public function address()
-    {
-        return view($this->_config['view']);
     }
 }

@@ -2,8 +2,6 @@
 namespace Webkul\Tax\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Routing\Router;
 
 class TaxServiceProvider extends ServiceProvider
 {
@@ -12,11 +10,9 @@ class TaxServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot(Router $router)
+    public function boot()
     {
         $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
-
-        $this->app->register(ModuleServiceProvider::class);
     }
 
     /**

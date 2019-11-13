@@ -2,13 +2,11 @@
 
 namespace Webkul\Admin\Http\Controllers\Customer;
 
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Webkul\Admin\Http\Controllers\Controller;
-use Webkul\Customer\Repositories\CustomerGroupRepository as CustomerGroup;
+use Webkul\Customer\Repositories\CustomerGroupRepository;
 
 /**
- * CustomerGroup controlller
+ * Customer Group controlller
  *
  * @author    Rahul Shukla <rahulshukla.symfony517@webkul.com>
  * @copyright 2018 Webkul Software Pvt Ltd (http://www.webkul.com)
@@ -27,27 +25,27 @@ class CustomerGroupController extends Controller
      *
      * @var array
     */
-    protected $customerGroup;
+    protected $customerGroupRepository;
 
      /**
      * Create a new controller instance.
      *
-     * @param Webkul\Customer\Repositories\CustomerGroupRepository as customerGroup;
+     * @param \Webkul\Customer\Repositories\CustomerGroupRepository $customerGroupRepository;
      * @return void
      */
-    public function __construct(CustomerGroup $customerGroup)
+    public function __construct(CustomerGroupRepository $customerGroupRepository)
     {
         $this->_config = request('_config');
 
         $this->middleware('admin');
 
-        $this->customerGroup = $customerGroup;
+        $this->customerGroupRepository = $customerGroupRepository;
     }
 
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
     */
     public function index()
     {
@@ -57,7 +55,7 @@ class CustomerGroupController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
     public function create()
     {
@@ -72,14 +70,15 @@ class CustomerGroupController extends Controller
     public function store()
     {
         $this->validate(request(), [
-            'name' => 'string|required',
+            'code' => ['required', 'unique:customer_groups,code', new \Webkul\Core\Contracts\Validations\Code],
+            'name' => 'required',
         ]);
 
         $data = request()->all();
 
         $data['is_user_defined'] = 1;
 
-        $this->customerGroup->create($data);
+        $this->customerGroupRepository->create($data);
 
         session()->flash('success', trans('admin::app.response.create-success', ['name' => 'Customer Group']));
 
@@ -90,11 +89,11 @@ class CustomerGroupController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
     public function edit($id)
     {
-        $group = $this->customerGroup->findOneWhere(['id'=>$id]);
+        $group = $this->customerGroupRepository->findOrFail($id);
 
         return view($this->_config['view'], compact('group'));
     }
@@ -102,17 +101,17 @@ class CustomerGroupController extends Controller
      /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update($id)
     {
         $this->validate(request(), [
-            'name' => 'string|required',
+            'code' => ['required', 'unique:customer_groups,code,' . $id, new \Webkul\Core\Contracts\Validations\Code],
+            'name' => 'required',
         ]);
 
-        $this->customerGroup->update(request()->all(), $id);
+        $this->customerGroupRepository->update(request()->all(), $id);
 
         session()->flash('success', trans('admin::app.response.update-success', ['name' => 'Customer Group']));
 
@@ -127,18 +126,24 @@ class CustomerGroupController extends Controller
      */
     public function destroy($id)
     {
-        $group = $this->customerGroup->findOneByField('id', $id);
+        $customerGroup = $this->customerGroupRepository->findOrFail($id);
 
-        if ($group->is_user_defined == 0) {
+        if ($customerGroup->is_user_defined == 0) {
             session()->flash('warning', trans('admin::app.customers.customers.group-default'));
-        } else if (count($group->customer) > 0) {
+        } else if (count($customerGroup->customer) > 0) {
             session()->flash('warning', trans('admin::app.response.customer-associate', ['name' => 'Customer Group']));
         } else {
-            session()->flash('success', trans('admin::app.response.delete-success', ['name' => 'Customer Group']));
+            try {
+                $this->customerGroupRepository->delete($id);
 
-            $this->customerGroup->delete($id);
+                session()->flash('success', trans('admin::app.response.delete-success', ['name' => 'Customer Group']));
+
+                return response()->json(['message' => true], 200);
+            } catch(\Exception $e) {
+                session()->flash('error', trans('admin::app.response.delete-failed', ['name' => 'Customer Group']));
+            }
         }
 
-        return redirect()->back();
+        return response()->json(['message' => false], 400);
     }
 }

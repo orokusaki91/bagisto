@@ -2,6 +2,381 @@
 
 #### This changelog consists the bug & security fixes and new features being included in the releases listed below.
 
+## **v0.1.8 (4th of October, 2019)** - *Release*
+
+* [feature] - Refund is added for orders.
+
+* #1338 [fixed] - Fixed the complete header ,header should not scroll on scrolling the page.
+
+* #1442 [fixed] - Customer should get an email after registration.
+
+* #1490 [fixed] - Getting Incorrect paid amount and due amount if order contains more than one product.
+
+* #1492 [fixed] - Not showing orderid with prefix and suffix in Refund section.
+
+* #1504 [fixed] - Getting Exception when applying filter in Invoices grid through Invoice Date.
+
+* #1489 [fixed] - Quantity of Product doesn't get updated after creating a refund.
+
+* #1486 [fixed] - Getting incorrect Total Due Amount if discount is applied.
+
+* #1484 [fixed] - Unable to edit data of Refund Shipping field.
+
+* #1483 [fixed] - Refund option should not be available if refund is already created.
+
+* #1461 [fixed] - Invoice number length should be number of zeros that appears before invoice id.
+
+* #1447 [fixed] - Order ID is not matching after printing invoice.
+
+* #1460 [fixed] - Getting error on deleting Newsletter.
+
+* #1172 [fixed] - Default shipping and payment should be selected, currently no shipping method and payment method is selected by default.
+
+## **v0.1.7 (17th of September, 2019)** - *Release*
+
+* [feature] - Fiterable attributes according to category.
+
+* [feature] - New module CMS added for adding static pages.
+
+* [feature] - Dyanamic event firing in datagrid while adding columns, actions and mass actions as well.
+
+* [enhancement] - Customer gets an email after registration.
+
+* [enhancement] - Customer receives cancellation mail if his/her order is cancelled by admin.
+
+* [enhancement] - SEO is now available for home page.
+
+* [enhancement] - If account is created for customer by admin then customer should received an email that his/her account is created with create password link.
+
+* [enhancement] - product_flat will is now scalable according to choice of attributes to be used in it.
+
+* #1258 [fixed] - If payment is done through paypal then invoice should generate automatically and status of Order should be processing.
+
+* #1320 [fixed] - Catalog rule is not working according to selected attributes, if category is not selected.
+
+* #1260 [fixed] - Getting broken image link in email.
+
+* #1434 [fixed] - Incorrect discount amount in case of multicurrency.
+
+* #1288 [fixed] - Getting exception while creating cart rules if any of the dropdown field left blank.
+
+* #1381 [fixed] - Filter is not working properly for action type column in cart rule.
+
+* #1348 [fixed] - Showing incorrect grandtotal in invoice section of admin, if order is placed in currency other than base currency.
+
+* #1259 [fixed] - Getting exception if using same sku for variants..
+
+* #1380 [fixed] - Getting error after refreshing the page.
+
+* #1256 [fixed] - Discounted amount is not displaying in invoice and invoice pdf at both customer end and admin end.
+
+* #1411 [fixed] - Getting exception on updating cart rule.
+
+* #1284 [fixed] - Updated price for variant is not reflected on store.
+
+* #1286 [fixed] - Incorrect discount is showing in cart.
+
+* #1382 [fixed] - In case of "Adjust whole cart to percent" discount amount is getting calculated according to price of one product.
+
+* #1415 [fixed] - Wrong discount applies if Action "Adjust whole cart to percent" is selected.
+
+* #1417 [fixed] - Discount amount is showing in "Quantity" column.
+
+* #973 [fixed] - Edit Slider, get wrong with: An invalid form control with name='image[image_0]' is not focusable.
+
+* #1263 [fixed] - For forgot password Submit button should get disabled if user has already clicked on submit button.
+
+* #1379 [fixed] - Cart rule not working in case of non-coupon if any condition is given.
+
+* #1239 [fixed] - Filterable attributes should not display in layered navigation if there are no product in that particular category.
+
+* #1351 [fixed] - Getting exception when assigning the root category to another category.
+
+* #1372 [fixed] - Getting exception if while updating cart rule , if any option is selected from "How to Choose Products?".
+
+* #1375 [fixed] - Wrong discount applied on cart in case of fixed discount.
+
+* #1226 [fixed] - Product variation that has been ordered should display in customer order section in case of configurable product.
+
+* #1391 [fixed] - By default attribute condition gets saved as 1 in db, because of which cart rule not getting applied.
+
+* #1277 [fixed] - Getting exception on creating cart rules.
+
+* #1334 [fixed] - On editing catalog rule data gets removed from Discount Amount field.
+
+* #778 [fixed] - Error when add item to cart.
+
+* #1253 [fixed] - Selected Channel for products get deselected after saving the product.
+
+* #1319 [fixed] - Getting exception when click on Apply rules if conditions are left empty while creating catalog rule.
+
+* #1295 [fixed] - Getting exception on changing the locale from cms page.
+
+* #1233 [fixed] - Got exception on front-end when first time changes the locale ,the changed locale have rtl direction.
+
+* #1235 [fixed] - Attributes are not visible in category page to select as filterable attribute if attributes name are not provided in particular locales.
+
+* #1177 [fixed] - Getting exception when trying to recover password.
+
+* #1228 [fixed] - Getting issue when entering direct url for customer account profile.
+
+* #1229 [fixed] - Issue with currency in customer order section, currency code doesn't get converted at orders page of customer.
+
+* #1234 [fixed] - After selecting direction to filter locale acc to direction no other field appears to select format.
+
+* #1015 [fixed] - Adjust Paginator Number of Elements.
+
+* #968 [fixed] - sorting is not working (price).
+
+* #1190 [fixed] - After printing invoice at customer end, price is not getting change according to currency in invoice.
+
+* #1209 [fixed] - There is an image issue while ordering any variant of configurable product.
+
+* #1217 [fixed] - Layered navigation for price is not working, when click on bar it shifts to rightmost end.Getting this issue in case of configurable product only.
+
+* #1216 [fixed] - Price filter of layered navigation not working properly in case of Multi Currency.
+
+* #1130 [fixed] - If "does not contain" is used in case of Shipping method, then discount amount get implemented before selecting any shipping method.
+
+* #1129 [fixed] - Discount not getting applied if "does not contain" condition is used from Actions for Payment Methods.
+
+## **v0.1.6(28th of June, 2019)** - *Release*
+
+* [feature] - Cart rules for providing discount with coupons and without coupons.
+
+* [feature] - Take notes on customers.
+
+* [feature] - Added swatch type attribute for products.
+
+* [feature] - Added file type attribute for products.
+
+* [feature] - Added image type attribute for products.
+
+* [feature] - Admins can now export products.
+
+* [feature] - Activate/Deactivate customers from admin panel.
+
+* [feature] - Added backorders as global level configuration for Admin.
+
+* [feature] - REST APIs added as a separate package.
+
+* [enhancement] - Each channel can choose their respective root category.
+
+* [enhancement] - Added customer group 'Guest' for guest type user comparison (reference usage in cart rule create and edit).
+
+* [enhancement] - Global configuration to allow reviews from guests.
+
+* [enhancement] - Weight unit options added as global configuration.
+
+* [enhancement] - Dynamic footer bottom text input added as global level configuration.
+
+* [enhancement] - Admin can now change their logo added as global level configuration.
+
+* [enhancement] - Added global configuration for news letter subscription.
+
+* [enhancement] - Added configuration to enable email verification on customer registration.
+
+* [enhancement] - Dependent field added in system configuration.
+
+* [optimization] - Removed products dependency from products_datagrid table and that table had been phased out of the system successfully.
+
+* [optimization] - Massive performance improvements in page load from last stable release of v0.1.5.
+
+* #636 [fixed] - Getting exception in shipment grid.
+
+* #638 [fixed] - Colors are not available in swatch on selecting Swatch Type as "Color Swatch".
+
+* #639 [fixed] - Broken link of image, on edit page of attribute in case of Swatch Type "Image" when editing first time.
+
+* #642 [fixed] - Getting exception on search in Products, Categories, Shipments & Product Reviews datagrids.
+
+* #654 [fixed] - Getting Exception while adding product images by gui installer.
+
+* #646 [fixed] - Warning: array_combine() expects parameter 1 to be array, null given ( install.php on line 32 ).
+
+* #647 [fixed] - Special price not working.
+
+* #655 [fixed] - Not able to create category with images, category doesn't get save if image is used.
+
+* #656 [fixed] - Getting checkout page blank when product is added in cart first and then proceed for checkout.Getting this issue in case of logged-in customer.Getting same issue in case of Buy-now also.
+
+* #657 [fixed] - Not able to export order.Not getting any response after clicking on Export.Getting this issue for all export functionality
+
+* #666 [enhancement] - Create possibility of choose the qty os address line.
+
+* #671 [fixed] - Having these errors Undefined variable: key/value.
+
+* #730 [fixed] - Add a word limitation for Category name so that after that limit category name should display in different line.
+
+* #729 [fixed] - Price Slider overlap with category menu.
+
+* #728 [fixed] - If multiple products are added in cart and we update the quantity of product which is not available then in this case its not showing a message that request quantity is not available, it shows success message that products in cart is updated.
+
+* #727 [fixed] - Quantity of Product doesn't get updated at product page after generating shipment.
+
+* #720 [fixed] - Case issue HomeController.php.
+
+* #718 [fixed] - If user with custom role doesn't have access of Products and if he click on product link given in dashboard then getting exception.It should display unauthorised access message.
+
+* #717 [fixed] - Url is not working "Add to Cart" in drop shipping manager.
+
+* #713 [fixed] - Getting exception on deleting default channel.
+
+* #712 [fixed] - Correct the filter option in Invoice grid.
+
+* #710 [fixed] - Getting exception when applying filter on Product according to Status.
+
+* #709 [fixed] - Getting exception when applying filter according to Order Date of Order grid of Admin.
+
+* #707 [fixed] - If in display mode for categories "Only Product" is selected then description should not display on front-end and if Only "Description" is selected than product should not display for category.
+
+* #705 [fixed] - For 3 level menu option if access is given for only first menu and third menu , then getting unauthorized access.
+
+* #699 [fixed] - Active category class missing
+
+* #765 [fixed] - Getting issue in mass deletion for the configurable products if we have saved the products but variation and name of products has not saved.Getting this issue when App_Debug mode is false.
+
+* #764 [fixed] - Make "Sliders" and "Image" field as required.While creating slider if image is not uploaded then slider is not created and its not showing that this field is required validation message.
+
+* #763 [fixed] - Add a validation in tax rate that it should not be negative.
+
+* #762 [fixed] - In Order Section of Customer Account no column is available in filter dropdown.
+
+* #761 [fixed] - Issue in creating products if special characters are used in sku field.On add Product page if we use special character then it will be saved but when we click on Save Product button it gives validation error message that "The sku must be valid slug." admin.
+
+* #760 [fixed] - Not able to add product to Wishlist from product page.
+
+* #759 [fixed] - Text for Add to Cart button is not properly visible on product page for locale pt_BR.
+
+* #757 [fixed] - Product getting save if price and weight is negative in variants of configurable product.
+
+* #755 [fixed] - When trying to change display mode for product to list view when locale is "arabic" , it changes to default locale.
+
+* #753 [fixed] - While creating attribute of type swatch, admin name and name according to locale is showing as required but get saved if field is left as blank, and while creating product this attribute field is blank.
+
+* #752 [fixed] - On creating custom theme for shop it was also affecting admin panel's frontend.
+
+* #750 [fixed] - Cross site request forgery.
+
+* #749 [fixed] - Broken access control.
+
+* #742 [fixed] - Getting exception when we change locale from Search result page.
+
+* #741 [fixed] - Trying to get property 'permission_type' of non-object.
+
+* #825 [fixed] - unable to update ( is_filterable ) in attributes.
+
+* #818 [fixed] - Email should sent to the respective inventory from which shipment has been created.
+
+* #817 [fixed] - Admin should receive an email when an order is placed.
+
+* #815 [fixed] - Issue in Attribute while creating configurable product.
+
+* #814 [fixed] - Implement sort order feature for payment methods, so that payment method should display on front-end according to sort-order.
+
+* #783 [fixed] - Image display issue of product on front-end when installation is done through GUI Installer.
+
+* #771 [fixed] - Getting exception when login with custom role.
+
+* #767 [fixed] - After applying filter of status , the result display in boolean for Active/True and Inactive/False.
+
+* #879 [fixed] - Getting validation error message for locale while editing attribute.Attribute value is required for all locale.
+
+* #867 [fixed] - Getting exception if user create shipment for product which has been deleted from catalog.
+
+* #842 [fixed] - Not able to export. This functionality is not working everywhere, where export is used.
+
+* #841 [fixed] - Layout issue on 404 Page.
+
+* #835 [fixed] - Parent Products show instock when all children have quantity 0.
+
+* #939 [fixed] - Not able to save price in decimal for configurable products.
+
+* #932 [fixed] - Getting incorrect price of product in case of configurable product if custom attribute of select type is used.
+
+* #923 [fixed] - Required validation is not working for Lines in a Street Address, and add 1 as default line for address field.
+
+* #917 [fixed] - Attribute name should display with attribute value.
+
+* #916 [fixed] - SQLSTATE[42S22]: Column not found: 1054 Unknown column 'phone'.
+
+* #897 [fixed] - Product get saved without image, if used image is large in size.It should throw an error message.
+
+* #896 [fixed] - getVariantMinPrice does not look at special_price.
+
+* #894 [fixed] - Storage link command is missing when installing framework through installer.
+
+* #890 [fixed] - An error message should show if uploaded mage size is large, while saving the category.
+
+* #1003 [fixed] - Getting exception if on editing any cart rule we select " Use Coupon" as Yes.
+
+* #1001 [fixed] - Getting error while placing an order.
+
+* #997 [fixed] - Change the validation for description.
+
+* #995 [fixed] - [default] en field of labels section disappear after entering data in "Global Label" field.
+
+* #994 [fixed] - Getting exception while creating cart rules.
+
+* #993 [fixed] - Rule Name should be alphanumeric.
+
+* #957 [fixed] - Typo in event fire.
+
+* #949 [fixed] - Refresh order summary on every checkout step.
+
+* #1075 [fixed] - Validation error message is not showing for Customer Group.
+
+* #1069 [fixed] - Getting exception on editing the second customer.
+
+* #1068 [fixed] - Product Inventory is "Zero" but in product page showing In Stock.
+
+* #1065 [fixed] - On editing any cart rule if user need to add any new condition then he need to select value from Add Conditions again.
+
+* #1061 [fixed] - Cart rule not working For Shipping code.
+
+* #1060 [fixed] - If cart rule is not created for guest then also it is applicable for guest user.
+
+* #1059 [fixed] - Cart Rule not working for Shipping state. Created a non coupon cart rule for Condition Shipping state but it doesn't get applied.
+
+* #1053 [fixed] - Discount amount is not displaying in orders.
+
+* #1052 [fixed] - Coupon is not applicable in case of payment methods.
+
+* #1051 [fixed] - If cart rule is create for customer having group guest, then also general group customer is also able to use the same coupon.
+
+* #1050 [fixed] - Coupon code discount amount is not displaying on checkout page.
+
+* #1011 [fixed] - Channel, Add Condition and Global label field not showing validation error message if user save without entering any data in these fields.
+
+* #1007 [fixed] - Applying zero discount amount in case of percentage.
+
+* #1006 [fixed] - Not able to remove coupon if once applied.
+
+* #1005 [fixed] - Cart rule not working correctly with coupon code.Fixed discount of amount 10 is created but after applying amount need to pay by customer is 10.
+
+* #1131 [fixed] - If "does not contain" is used in case of Shipping city, then discount amount get implemented before selecting any address.
+
+* #1127 [fixed] - Getting wrong grandtotal if in cart rule shipping is selected as free.
+
+* #1113 [fixed] - Cart rule is not working for guest user.
+
+* #1114 [fixed] - Unable to search cart rule by name.
+
+* #1112 [fixed] - Provide an option to delete the note added for a customer.
+
+* #1103 [fixed] - If entered coupon is incorrect then after clicking on Apply coupon button once the button should get disabled until the coupon code changes.
+
+* #1102 [fixed] - If in condition percentage of product is selected , then also fixed amount discount is applied.
+
+* #1097 [fixed] - Coupon get applied if only one product is added in cart and from action it is saved as buy atleast 2.
+
+* #1096 [fixed] - If any discount is already applied on cart and customer uses his coupon to get discount then in this case coupon discount should be applied.
+
+* #1095 [fixed] - If maximum quantity allowed to discount is selected as 2 then on both product discount should be applied.
+
+* #1080 [fixed] - Customer should be logged out if admin blocked the user, and a message should display "Your account has been blocked by admin".
+
+
 ## **v0.1.5(15th of March, 2019)** - *Release*
 
 * [feature] - Category display mode.

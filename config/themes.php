@@ -1,20 +1,20 @@
 <?php
 
 return [
-    'default' => 'Custom',
+    'default' => 'default',
 
     'themes' => [
-        // 'default' => [
-        //     'views_path' => 'resources/themes/default/views',
-        //     'assets_path' => 'public/themes/default/assets',
-        //     'name' => 'Default'
-        // ],
+        'default' => [
+            'views_path' => 'resources/themes/default/views',
+            'assets_path' => 'public/themes/default/assets',
+            'name' => 'Default'
+        ],
 
-        'custom' => [
-            'views_path' => 'resources/views/themes/custom',
-            'assets_path' => 'public/themes/custom/assets',
-            'name' => 'Custom',
-            // 'parent' => 'default'
-        ]
+        // 'bliss' => [
+        //     'views_path' => 'resources/themes/bliss/views',
+        //     'assets_path' => 'public/themes/bliss/assets',
+        //     'name' => 'Bliss',
+        //     'parent' => 'default'
+        // ]
     ]
 ];

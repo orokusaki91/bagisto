@@ -4,7 +4,8 @@ namespace Webkul\Core\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Webkul\Core\Repositories\SubscribersListRepository as Subscribers;
+use Webkul\Core\Repositories\SubscribersListRepository;
+
 /**
  * Subscription controller
  *
@@ -21,15 +22,21 @@ class SubscriptionController extends Controller
     protected $_config;
 
     /**
-     * Subscription repository instance
+     * SubscribersListRepository
      *
-     * @var instanceof SubscribersListRepository
+     * @var Object
      */
-    protected $subscribers;
+    protected $subscribersListRepository;
 
-    public function __construct(Subscribers $subscribers)
+    /**
+     * Create a new controller instance.
+     *
+     * @param  \Webkul\Core\Repositories\SubscribersListRepository $subscribersListRepository
+     * @return void
+     */
+    public function __construct(SubscribersListRepository $subscribersListRepository)
     {
-        $this->subscribers = $subscribers;
+        $this->subscribersListRepository = $subscribersListRepository;
 
         $this->_config = request('_config');
     }
@@ -37,7 +44,7 @@ class SubscriptionController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
     public function index()
     {
@@ -48,11 +55,11 @@ class SubscriptionController extends Controller
      * To unsubscribe the user without deleting the resource of the subscribed user
      *
      * @param integer $id
-     *
-     * @return mixed
+     * @return \Illuminate\View\View
      */
-    public function edit($id) {
-        $subscriber = $this->subscribers->findOneByField('id', $id);
+    public function edit($id)
+    {
+        $subscriber = $this->subscribersListRepository->findOrFail($id);
 
         return view($this->_config['view'])->with('subscriber', $subscriber);
     }
@@ -61,13 +68,13 @@ class SubscriptionController extends Controller
      * To unsubscribe the user without deleting the resource of the subscribed user
      *
      * @param integer $id
-     *
      * @return mixed
      */
-    public function update($id) {
+    public function update($id)
+    {
         $data = request()->all();
 
-        $subscriber = $this->subscribers->findOneByField('id', $id);
+        $subscriber = $this->subscribersListRepository->findOrFail($id);
 
         $result = $subscriber->update($data);
 
@@ -88,11 +95,18 @@ class SubscriptionController extends Controller
      */
     public function destroy($id)
     {
-        if ($this->subscribers->delete($id))
-            session()->flash('success', trans('admin::app.customers.subscribers.delete'));
-        else
-            session()->flash('error', trans('admin::app.customers.subscribers.delete-failed'));
+        $subscriber = $this->subscribersListRepository->findOrFail($id);
 
-        return redirect()->back();
+        try {
+            $this->subscribersListRepository->delete($id);
+
+            session()->flash('success', trans('admin::app.response.delete-success', ['name' => 'Subscriber']));
+
+            return response()->json(['message' => true], 200);
+        } catch (\Exception $e) {
+            session()->flash('error', trans('admin::app.response.delete-failed', ['name' => 'Subscriber']));
+        }
+
+        return response()->json(['message' => false], 400);
     }
 }

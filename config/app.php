@@ -131,20 +131,14 @@ return [
     'cipher' => 'AES-256-CBC',
 
     /*
-    |--------------------------------------------------------------------------
-    | Autoloaded Service Providers
-    |--------------------------------------------------------------------------
-    |
-    | The service providers listed here will be automatically loaded on the
-    | request to your application. Feel free to add your own services to
-    | this array to grant expanded functionality to your applications.
-    |
-    */
-
-    /*
         Code Editor
     */
     'editor' =>'vscode',
+
+    /*
+        Application Version
+    */
+    'version' => env('APP_VERSION', '0.1.6'),
 
     /**
      * Blacklisting attributes while debugging
@@ -164,6 +158,17 @@ return [
             'password'
         ],
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Autoloaded Service Providers
+    |--------------------------------------------------------------------------
+    |
+    | The service providers listed here will be automatically loaded on the
+    | request to your application. Feel free to add your own services to
+    | this array to grant expanded functionality to your applications.
+    |
+    */
 
     'providers' => [
 
@@ -197,8 +202,7 @@ return [
          * Package Service Providers...
          */
 
-        Dimsav\Translatable\TranslatableServiceProvider::class,
-        Propaganistas\LaravelIntl\IntlServiceProvider::class,
+        Astrotomic\Translatable\TranslatableServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -220,6 +224,7 @@ return [
         Konekt\Concord\ConcordServiceProvider::class,
         Flynsarmy\DbBladeCompiler\DbBladeCompilerServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
+        Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
 
         //Webkul packages
         Webkul\Theme\Providers\ThemeServiceProvider::class,
@@ -240,6 +245,8 @@ return [
         Webkul\Sales\Providers\SalesServiceProvider::class,
         Webkul\Tax\Providers\TaxServiceProvider::class,
         Webkul\API\Providers\APIServiceProvider::class,
+        Webkul\Discount\Providers\DiscountServiceProvider::class,
+        Webkul\CMS\Providers\CMSServiceProvider::class
     ],
 
     /*
@@ -296,5 +303,7 @@ return [
         'DbView' => Flynsarmy\DbBladeCompiler\Facades\DbView::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+        'Concord' => Konekt\Concord\Facades\Concord::class,
+        'Helper'  => Konekt\Concord\Facades\Helper::class
     ],
 ];

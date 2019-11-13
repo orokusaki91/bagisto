@@ -12,9 +12,18 @@ class Currency extends Model implements CurrencyContract
      *
      * @var array
      */
-    protected $fillable = [
-        'code', 'name'
-    ];
+    protected $fillable = ['code', 'name', 'symbol'];
+
+    /**
+     * Set currency code in capital
+     *
+     * @param  string  $value
+     * @return void
+     */
+    public function setCodeAttribute($code)
+    {
+        $this->attributes['code'] = strtoupper($code);
+    }
 
     /**
      * Get the currency_exchange associated with the currency.

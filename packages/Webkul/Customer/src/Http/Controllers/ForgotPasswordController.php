@@ -2,8 +2,6 @@
 
 namespace Webkul\Customer\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Support\Facades\Password;
 
@@ -38,7 +36,7 @@ class ForgotPasswordController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
     public function create()
     {
@@ -52,25 +50,31 @@ class ForgotPasswordController extends Controller
      */
     public function store()
     {
-        $this->validate(request(), [
-            'email' => 'required|email'
-        ]);
+        try {
+            $this->validate(request(), [
+                'email' => 'required|email'
+            ]);
 
-        $response = $this->broker()->sendResetLink(
-            request(['email'])
-        );
-        //dd($response);
-        if ($response == Password::RESET_LINK_SENT) {
-            session()->flash('success', trans($response));
-
-            return back();
-        }
-
-        return back()
-            ->withInput(request(['email']))
-            ->withErrors(
-                ['email' => trans($response)]
+            $response = $this->broker()->sendResetLink(
+                request(['email'])
             );
+
+            if ($response == Password::RESET_LINK_SENT) {
+                session()->flash('success', trans($response));
+
+                return back();
+            }
+
+            return back()
+                ->withInput(request(['email']))
+                ->withErrors(
+                    ['email' => trans($response)]
+                );
+        } catch (\Exception $e) {
+            session()->flash('error', trans($e->getMessage()));
+
+            return redirect()->back();
+        }
     }
 
     /**

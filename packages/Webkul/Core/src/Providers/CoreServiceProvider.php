@@ -4,10 +4,11 @@ namespace Webkul\Core\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Routing\Router;
 use Illuminate\Foundation\AliasLoader;
 use Webkul\Core\Core;
 use Webkul\Core\Facades\Core as CoreFacade;
+use Webkul\Core\Models\SliderProxy;
+use Webkul\Core\Observers\SliderObserver;
 
 class CoreServiceProvider extends ServiceProvider
 {
@@ -16,7 +17,7 @@ class CoreServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot(Router $router)
+    public function boot()
     {
         include __DIR__ . '/../Http/helpers.php';
 
@@ -30,7 +31,11 @@ class CoreServiceProvider extends ServiceProvider
 
         Validator::extend('decimal', 'Webkul\Core\Contracts\Validations\Decimal@passes');
 
-        $this->app->register(ModuleServiceProvider::class);
+        $this->publishes([
+            dirname(__DIR__) . '/Config/concord.php' => config_path('concord.php'),
+        ]);
+
+        SliderProxy::observe(SliderObserver::class);
     }
 
     /**

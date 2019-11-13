@@ -19,7 +19,7 @@
                             {{ $billingAddress->address1 }},<br/> {{ $billingAddress->state }}
                         </li>
                         <li class="mb-10">
-                            {{ country()->name($billingAddress->country) }} {{ $billingAddress->postcode }}
+                            {{ core()->country_name($billingAddress->country) }} {{ $billingAddress->postcode }}
                         </li>
 
                         <span class="horizontal-rule mb-15 mt-15"></span>
@@ -32,7 +32,7 @@
             </div>
         @endif
 
-        @if ($shippingAddress = $cart->shipping_address)
+        @if ($cart->haveStockableItems() && $shippingAddress = $cart->shipping_address)
             <div class="shipping-address">
                 <div class="card-title mb-20">
                     <b>{{ __('shop::app.checkout.onepage.shipping-address') }}</b>
@@ -47,7 +47,7 @@
                             {{ $shippingAddress->address1 }},<br/> {{ $shippingAddress->state }}
                         </li>
                         <li class="mb-10">
-                            {{ country()->name($shippingAddress->country) }} {{ $shippingAddress->postcode }}
+                            {{ core()->country_name($shippingAddress->country) }} {{ $shippingAddress->postcode }}
                         </li>
 
                         <span class="horizontal-rule mb-15 mt-15"></span>
@@ -66,14 +66,11 @@
 
     <div class="cart-item-list mt-20">
         @foreach ($cart->items as $item)
+            @php
+                $productBaseImage = $item->product->getTypeInstance()->getBaseImage($item);
+            @endphp
 
-            <?php
-                $product = $item->product;
-
-                $productBaseImage = $productImageHelper->getProductBaseImage($product);
-            ?>
-
-            <div class="item mb-5">
+            <div class="item mb-5" style="margin-bottom: 5px;">
                 <div class="item-image">
                     <img src="{{ $productBaseImage['medium_image_url'] }}" />
                 </div>
@@ -83,12 +80,10 @@
                     {!! view_render_event('bagisto.shop.checkout.name.before', ['item' => $item]) !!}
 
                     <div class="item-title">
-                        {{ $product->name }}
+                        {{ $item->product->name }}
                     </div>
 
                     {!! view_render_event('bagisto.shop.checkout.name.after', ['item' => $item]) !!}
-
-
                     {!! view_render_event('bagisto.shop.checkout.price.before', ['item' => $item]) !!}
 
                     <div class="row">
@@ -101,8 +96,6 @@
                     </div>
 
                     {!! view_render_event('bagisto.shop.checkout.price.after', ['item' => $item]) !!}
-
-
                     {!! view_render_event('bagisto.shop.checkout.quantity.before', ['item' => $item]) !!}
 
                     <div class="row">
@@ -116,41 +109,41 @@
 
                     {!! view_render_event('bagisto.shop.checkout.quantity.after', ['item' => $item]) !!}
 
+                    {!! view_render_event('bagisto.shop.checkout.options.before', ['item' => $item]) !!}
 
-                    @if ($product->type == 'configurable')
-                        {!! view_render_event('bagisto.shop.checkout.options.after', ['item' => $item]) !!}
-
-                        <div class="summary" >
-
-                            {{ Cart::getProductAttributeOptionDetails($item->child->product)['html'] }}
+                    @if (isset($item->additional['attributes']))
+                        <div class="item-options">
+                            
+                            @foreach ($item->additional['attributes'] as $attribute)
+                                <b>{{ $attribute['attribute_name'] }} : </b>{{ $attribute['option_label'] }}</br>
+                            @endforeach
 
                         </div>
-
-                        {!! view_render_event('bagisto.shop.checkout.options.after', ['item' => $item]) !!}
                     @endif
-                </div>
 
+                    {!! view_render_event('bagisto.shop.checkout.options.after', ['item' => $item]) !!}
+                </div>
             </div>
         @endforeach
-
     </div>
 
     <div class="order-description mt-20">
-
         <div class="pull-left" style="width: 60%; float: left;">
-            <div class="shipping">
-                <div class="decorator">
-                    <i class="icon shipping-icon"></i>
-                </div>
+            @if ($cart->haveStockableItems())
+                <div class="shipping">
+                    <div class="decorator">
+                        <i class="icon shipping-icon"></i>
+                    </div>
 
-                <div class="text">
-                    {{ core()->currency($cart->selected_shipping_rate->base_price) }}
+                    <div class="text">
+                        {{ core()->currency($cart->selected_shipping_rate->base_price) }}
 
-                    <div class="info">
-                        {{ $cart->selected_shipping_rate->method_title }}
+                        <div class="info">
+                            {{ $cart->selected_shipping_rate->method_title }}
+                        </div>
                     </div>
                 </div>
-            </div>
+            @endif
 
             <div class="payment">
                 <div class="decorator">
@@ -165,11 +158,7 @@
         </div>
 
         <div class="pull-right" style="width: 40%; float: left;">
-
-            @include('shop::checkout.total.summary', ['cart' => $cart])
-
+            <slot name="summary-section"></slot>
         </div>
-
     </div>
-
 </div>

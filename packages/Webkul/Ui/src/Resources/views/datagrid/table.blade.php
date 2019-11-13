@@ -114,7 +114,7 @@
                                             <option value="gt">{{ __('ui::app.datagrid.greater') }}</option>
                                             <option value="lt">{{ __('ui::app.datagrid.less') }}</option>
                                             <option value="gte">{{ __('ui::app.datagrid.greatere') }}</option>
-                                            <option value="lte">{{ __('ui::app.datagrid.equalse') }}</option>
+                                            <option value="lte">{{ __('ui::app.datagrid.lesse') }}</option>
                                             {{-- <option value="btw">{{ __('ui::app.datagrid.between') }}</option> --}}
                                         </select>
                                     </div>
@@ -146,74 +146,9 @@
                 </div>
 
                 <table class="table">
-                    <thead v-if="massActionsToggle">
-                        @if (isset($results['massactions']))
-                            <tr class="mass-action" v-if="massActionsToggle" style="height: 65px;">
-                                <th colspan="100%">
-                                    <div class="mass-action-wrapper" style="display: flex; flex-direction: row; align-items: center; justify-content: flex-start;">
+                    @include('ui::datagrid.partials.mass-action-header')
 
-                                        <span class="massaction-remove" v-on:click="removeMassActions" style="margin-right: 10px; margin-top: 3px;">
-                                            <span class="icon checkbox-dash-icon"></span>
-                                        </span>
-
-                                        <form method="POST" id="mass-action-form" style="display: inline-flex;" action="" onsubmit="return confirm('{{ __('ui::app.datagrid.click_on_action') }}')">
-                                            @csrf()
-
-                                            <input type="hidden" id="indexes" name="indexes" v-model="dataIds">
-
-                                            <div class="control-group">
-                                                <select class="control" v-model="massActionType" @change="changeMassActionTarget" name="massaction-type" required>
-                                                    <option v-for="(massAction, index) in massActions" :key="index" :value="massAction.type">@{{ massAction.label }}</option>
-                                                </select>
-                                            </div>
-
-                                            <div class="control-group" style="margin-left: 10px;" v-if="massActionType == 'update'">
-                                                <select class="control" v-model="massActionUpdateValue" name="update-options" required>
-                                                    <option v-for="(massActionValue, id) in massActionValues" :value="massActionValue">@{{ id }}</option>
-                                                </select>
-                                            </div>
-
-                                            <input type="submit" class="btn btn-sm btn-primary" style="margin-left: 10px;">
-                                        </form>
-                                    </div>
-                                </th>
-                            </tr>
-                        @endif
-                    </thead>
-
-                    <thead v-if="massActionsToggle == false">
-                        <tr style="height: 65px;">
-                            @if (count($results['records']) && $results['enableMassActions'])
-                                <th class="grid_head" id="mastercheckbox" style="width: 50px;">
-                                    <span class="checkbox">
-                                        <input type="checkbox" v-model="allSelected" v-on:change="selectAll">
-
-                                        <label class="checkbox-view" for="checkbox"></label>
-                                    </span>
-                                </th>
-                            @endif
-
-                            @foreach($results['columns'] as $key => $column)
-                                <th class="grid_head"
-                                    @if(isset($column['width']))
-                                        style="width: {{ $column['width'] }}"
-                                    @endif
-
-                                    @if(isset($column['sortable']) && $column['sortable'])
-                                        v-on:click="sortCollection('{{ $column['index'] }}')"
-                                    @endif
-                                >
-                                    {{ $column['label'] }}
-                                </th>
-                            @endforeach
-
-                            @if ($results['enableActions'])
-                                <th>
-                                    {{ __('ui::app.datagrid.actions') }}
-                                </th>
-                            @endif
-                        </tr>
-                    </thead>
+                    @include('ui::datagrid.partials.default-header')
 
                     @include('ui::datagrid.body', ['records' => $results['records'], 'actions' => $results['actions'], 'index' => $results['index'], 'columns' => $results['columns'],'enableMassActions' => $results['enableMassActions'], 'enableActions' => $results['enableActions'], 'norecords' => $results['norecords']])
                 </table>
@@ -224,53 +159,55 @@
             Vue.component('datagrid-filters', {
                 template: '#datagrid-filters',
 
-                data: () => ({
-                    filterIndex: @json($results['index']),
-                    gridCurrentData: @json($results['records']),
-                    massActions: @json($results['massactions']),
-                    massActionsToggle: false,
-                    massActionTarget: null,
-                    massActionType: null,
-                    massActionValues: [],
-                    massActionTargets: [],
-                    massActionUpdateValue: null,
-                    url: new URL(window.location.href),
-                    currentSort: null,
-                    dataIds: [],
-                    allSelected: false,
-                    sortDesc: 'desc',
-                    sortAsc: 'asc',
-                    sortUpIcon: 'sort-up-icon',
-                    sortDownIcon: 'sort-down-icon',
-                    currentSortIcon: null,
-                    isActive: false,
-                    isHidden: true,
-                    searchValue: '',
-                    filterColumn: true,
-                    filters: [],
-                    columnOrAlias: '',
-                    type: null,
-                    columns : @json($results['columns']),
-                    stringCondition: null,
-                    booleanCondition: null,
-                    numberCondition: null,
-                    datetimeCondition: null,
-                    stringValue: null,
-                    booleanValue: null,
-                    datetimeValue: '2000-01-01',
-                    numberValue: 0,
-                    stringConditionSelect: false,
-                    booleanConditionSelect: false,
-                    numberConditionSelect: false,
-                    datetimeConditionSelect: false
-                }),
+                data: function() {
+                    return {
+                        filterIndex: @json($results['index']),
+                        gridCurrentData: @json($results['records']),
+                        massActions: @json($results['massactions']),
+                        massActionsToggle: false,
+                        massActionTarget: null,
+                        massActionType: null,
+                        massActionValues: [],
+                        massActionTargets: [],
+                        massActionUpdateValue: null,
+                        url: new URL(window.location.href),
+                        currentSort: null,
+                        dataIds: [],
+                        allSelected: false,
+                        sortDesc: 'desc',
+                        sortAsc: 'asc',
+                        sortUpIcon: 'sort-up-icon',
+                        sortDownIcon: 'sort-down-icon',
+                        currentSortIcon: null,
+                        isActive: false,
+                        isHidden: true,
+                        searchValue: '',
+                        filterColumn: true,
+                        filters: [],
+                        columnOrAlias: '',
+                        type: null,
+                        columns : @json($results['columns']),
+                        stringCondition: null,
+                        booleanCondition: null,
+                        numberCondition: null,
+                        datetimeCondition: null,
+                        stringValue: null,
+                        booleanValue: null,
+                        datetimeValue: '2000-01-01',
+                        numberValue: 0,
+                        stringConditionSelect: false,
+                        booleanConditionSelect: false,
+                        numberConditionSelect: false,
+                        datetimeConditionSelect: false
+                    }
+                },
 
                 mounted: function() {
                     this.setParamsAndUrl();
                 },
 
                 methods: {
-                    getColumnOrAlias(columnOrAlias) {
+                    getColumnOrAlias: function(columnOrAlias) {
                         this.columnOrAlias = columnOrAlias;
 
                         for(column in this.columns) {
@@ -317,14 +254,14 @@
                         }
                     },
 
-                    nullify() {
+                    nullify: function() {
                         this.stringCondition = null;
                         this.datetimeCondition = null;
                         this.booleanCondition = null;
                         this.numberCondition = null;
                     },
 
-                    getResponse() {
+                    getResponse: function() {
                         label = '';
 
                         for(colIndex in this.columns) {
@@ -337,10 +274,11 @@
                             this.formURL(this.columnOrAlias, this.stringCondition, this.stringValue, label)
                         } else if (this.type == 'number') {
                             indexConditions = true;
-                            if (this.filterIndex == this.columnOrAlias && (this.numberValue == 0 || this.numberValue < 0)) {
-                                    indexConditions = false;
 
-                                    alert('{{__('ui::app.datagrid.zero-index')}}');
+                            if (this.filterIndex == this.columnOrAlias && (this.numberValue == 0 || this.numberValue < 0)) {
+                                indexConditions = false;
+
+                                alert('{{__('ui::app.datagrid.zero-index')}}');
                             }
 
                             if(indexConditions)
@@ -354,7 +292,7 @@
                         }
                     },
 
-                    sortCollection(alias) {
+                    sortCollection: function(alias) {
                         label = '';
 
                         for(colIndex in this.columns) {
@@ -367,14 +305,14 @@
                         this.formURL("sort", alias, this.sortAsc, label);
                     },
 
-                    searchCollection(searchValue) {
+                    searchCollection: function(searchValue) {
                         label = 'Search';
 
                         this.formURL("search", 'all', searchValue, label);
                     },
 
                     // function triggered to check whether the query exists or not and then call the make filters from the url
-                    setParamsAndUrl() {
+                    setParamsAndUrl: function() {
                         params = (new URL(window.location.href)).search;
 
                         if (params.slice(1, params.length).length > 0) {
@@ -397,21 +335,15 @@
                         }
                     },
 
-                    findCurrentSort() {
+                    findCurrentSort: function() {
                         for(i in this.filters) {
                             if (this.filters[i].column == 'sort') {
                                 this.currentSort = this.filters[i].val;
-
-                                // if (this.currentSort = 'asc') {
-                                //     this.currentSortIcon = this.sortUpIcon;
-                                // } else {
-                                //     this.currentSortIcon = this.sortDownIcon;
-                                // }
                             }
                         }
                     },
 
-                    changeMassActionTarget() {
+                    changeMassActionTarget: function() {
                         if (this.massActionType == 'delete') {
                             for(i in this.massActionTargets) {
                                 if (this.massActionTargets[i].type == 'delete') {
@@ -436,7 +368,7 @@
                     },
 
                     //make array of filters, sort and search
-                    formURL(column, condition, response, label) {
+                    formURL: function(column, condition, response, label) {
                         var obj = {};
 
                         if (column == "" || condition == "" || response == "" || column == null || condition == null || response == null) {
@@ -577,7 +509,7 @@
                     },
 
                     // make the url from the array and redirect
-                    makeURL() {
+                    makeURL: function() {
                         newParams = '';
 
                         for(i = 0; i < this.filters.length; i++) {
@@ -596,7 +528,7 @@
                     },
 
                     //make the filter array from url after being redirected
-                    arrayFromUrl() {
+                    arrayFromUrl: function() {
                         var obj = {};
                         processedUrl = this.url.search.slice(1, this.url.length);
                         splitted = [];
@@ -609,24 +541,17 @@
                         }
 
                         for(i = 0; i < moreSplitted.length; i++) {
-                            col = moreSplitted[i][0].replace(']','').split('[')[0];
-                            cond = moreSplitted[i][0].replace(']','').split('[')[1]
+                            col = moreSplitted[i][0].replace(']', '').split('[')[0];
+                            cond = moreSplitted[i][0].replace(']', '').split('[')[1]
                             val = moreSplitted[i][1];
 
                             label = 'cannotfindthislabel';
-
-                            // for(colIndex in this.columns) {
-                            //     if (this.columns[colIndex].alias == this.columnOrAlias) {
-                            //         label = this.columns[colIndex].label;
-                            //     }
-                            // }
 
                             obj.column = col;
                             obj.cond = cond;
                             obj.val = val;
 
                             if(col == "sort") {
-                                // console.log('sort', obj.cond);
                                 label = '';
 
                                 for(colIndex in this.columns) {
@@ -641,8 +566,16 @@
                                 obj.label = '';
 
                                 for(colIndex in this.columns) {
-                                    if(this.columns[colIndex].index == obj.column) {
+                                    if (this.columns[colIndex].index == obj.column) {
                                         obj.label = this.columns[colIndex].label;
+
+                                        if (this.columns[colIndex].type == 'boolean') {
+                                            if (obj.val == 1) {
+                                                obj.val = '{{ __('ui::app.datagrid.true') }}';
+                                            } else {
+                                                obj.val = '{{ __('ui::app.datagrid.false') }}';
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -654,7 +587,7 @@
                         }
                     },
 
-                    removeFilter(filter) {
+                    removeFilter: function(filter) {
                         for(i in this.filters) {
                             if (this.filters[i].col == filter.col && this.filters[i].cond == filter.cond && this.filters[i].val == filter.val) {
                                 this.filters.splice(i, 1);
@@ -665,7 +598,7 @@
                     },
 
                     //triggered when any select box is clicked in the datagrid
-                    select() {
+                    select: function() {
                         this.allSelected = false;
 
                         if(this.dataIds.length == 0)
@@ -675,7 +608,7 @@
                     },
 
                     //triggered when master checkbox is clicked
-                    selectAll() {
+                    selectAll: function() {
                         this.dataIds = [];
 
                         this.massActionsToggle = true;
@@ -687,7 +620,7 @@
                                     i = 0;
                                     for(currentId in this.gridCurrentData.data[currentData]) {
                                         if (i==0)
-                                            this.dataIds.push(this.gridCurrentData.data[currentData][currentId]);
+                                            this.dataIds.push(this.gridCurrentData.data[currentData][this.filterIndex]);
 
                                         i++;
                                     }
@@ -707,7 +640,33 @@
                         }
                     },
 
-                    removeMassActions() {
+                    doAction: function(e) {
+                        var element = e.currentTarget;
+
+                        if (confirm('{{__('ui::app.datagrid.massaction.delete') }}')) {
+                            axios.post(element.getAttribute('data-action'), {
+                                _token : element.getAttribute('data-token'),
+                                _method : element.getAttribute('data-method')
+                            }).then(function(response) {
+                                this.result = response;
+                                location.reload();
+                            }).catch(function (error) {
+                                location.reload();
+                            });
+
+                            e.preventDefault();
+                        } else {
+                            e.preventDefault();
+                        }
+                    },
+
+                    captureColumn: function(id) {
+                        element = document.getElementById(id);
+
+                        console.log(element.innerHTML);
+                    },
+
+                    removeMassActions: function() {
                         this.dataIds = [];
 
                         this.massActionsToggle = false;

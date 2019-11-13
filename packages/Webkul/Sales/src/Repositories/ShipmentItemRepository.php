@@ -4,6 +4,8 @@ namespace Webkul\Sales\Repositories;
 
 use Illuminate\Container\Container as App;
 use Webkul\Core\Eloquent\Repository;
+use Illuminate\Support\Facades\Event;
+use Webkul\Sales\Contracts\ShipmentItem;
 
 /**
  * ShipmentItem Reposotory
@@ -20,7 +22,7 @@ class ShipmentItemRepository extends Repository
      */
     function model()
     {
-        return 'Webkul\Sales\Contracts\ShipmentItem';
+        return ShipmentItem::class;
     }
 
     /**
@@ -31,25 +33,16 @@ class ShipmentItemRepository extends Repository
     {
         if (! $data['product'])
             return;
-            
+
         $orderedInventory = $data['product']->ordered_inventories()
                 ->where('channel_id', $data['shipment']->order->channel->id)
                 ->first();
-                
+
         if ($orderedInventory) {
-            if (($orderedQty = $orderedInventory->qty - $data['qty']) < 0) {
+            if (($orderedQty = $orderedInventory->qty - $data['qty']) < 0)
                 $orderedQty = 0;
-            }
-                
-            $orderedInventory->update([
-                    'qty' => $orderedQty
-                ]);
-        } else {
-            $data['product']->ordered_inventories()->create([
-                    'qty' => $data['qty'],
-                    'product_id' => $data['product']->id,
-                    'channel_id' => $data['shipment']->order->channel->id
-                ]);
+
+            $orderedInventory->update(['qty' => $orderedQty]);
         }
 
         $inventory = $data['product']->inventories()
@@ -57,15 +50,14 @@ class ShipmentItemRepository extends Repository
                 ->where('inventory_source_id', $data['shipment']->inventory_source_id)
                 ->first();
 
-        if (!$inventory)
+        if (! $inventory)
             return;
-            
-        if (($qty = $inventory->qty - $data['qty']) < 0) {
-            $qty = 0;
-        }
 
-        $inventory->update([
-                'qty' => $qty
-            ]);
+        if (($qty = $inventory->qty - $data['qty']) < 0)
+            $qty = 0;
+
+        $inventory->update(['qty' => $qty]);
+
+        Event::fire('catalog.product.update.after', $data['product']);
     }
 }

@@ -2,11 +2,8 @@
 
 namespace Webkul\Product\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Event;
-use Webkul\Product\Repositories\ProductRepository as Product;
-use Webkul\Product\Repositories\ProductReviewRepository as ProductReview;
+use Webkul\Product\Repositories\ProductReviewRepository;
 
 /**
  * Review controller
@@ -16,7 +13,6 @@ use Webkul\Product\Repositories\ProductReviewRepository as ProductReview;
  */
 class ReviewController extends Controller
 {
-
     /**
      * Contains route related configuration
      *
@@ -25,31 +21,23 @@ class ReviewController extends Controller
     protected $_config;
 
     /**
-     * ProductRepository object
-     *
-     * @var array
-     */
-    protected $product;
-
-    /**
      * ProductReviewRepository object
      *
-     * @var array
+     * @var Object
      */
-    protected $productReview;
+    protected $productReviewRepository;
 
     /**
      * Create a new controller instance.
      *
-     * @param  Webkul\Product\Repositories\ProductRepository        $product
-     * @param  Webkul\Product\Repositories\ProductReviewRepository  $productReview
+     * @param  \Webkul\Product\Repositories\ProductReviewRepository  $productReview
      * @return void
      */
-    public function __construct(Product $product, ProductReview $productReview)
+    public function __construct(
+        ProductReviewRepository $productReviewRepository
+    )
     {
-        $this->product = $product;
-
-        $this->productReview = $productReview;
+        $this->productReviewRepository = $productReviewRepository;
 
         $this->_config = request('_config');
     }
@@ -57,7 +45,7 @@ class ReviewController extends Controller
      /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View 
     */
     public function index()
     {
@@ -68,27 +56,26 @@ class ReviewController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View 
      */
     public function edit($id)
     {
-        $review = $this->productReview->find($id);
+        $review = $this->productReviewRepository->findOrFail($id);
 
-        return view($this->_config['view'],compact('review'));
+        return view($this->_config['view'], compact('review'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update($id)
     {
         Event::fire('customer.review.update.before', $id);
 
-        $this->productReview->update(request()->all(), $id);
+        $this->productReviewRepository->update(request()->all(), $id);
 
         Event::fire('customer.review.update.after', $id);
 
@@ -105,15 +92,23 @@ class ReviewController extends Controller
      */
     public function destroy($id)
     {
-        Event::fire('customer.review.delete.before', $id);
+        $productReview = $this->productReviewRepository->findOrFail($id);
 
-        $this->productReview->delete($id);
+        try {
+            Event::fire('customer.review.delete.before', $id);
 
-        Event::fire('customer.review.delete.after', $id);
+            $this->productReviewRepository->delete($id);
 
-        session()->flash('success', trans('admin::app.response.delete-success', ['name' => 'Review']));
+            Event::fire('customer.review.delete.after', $id);
 
-        return redirect()->back();
+            session()->flash('success', trans('admin::app.response.delete-success', ['name' => 'Review']));
+
+            return response()->json(['message' => true], 200);
+        } catch (\Exception $e) {
+            session()->flash('success', trans('admin::app.response.delete-failed', ['name' => 'Review']));
+        }
+
+        return response()->json(['message' => false], 400);
     }
 
     /**
@@ -121,7 +116,8 @@ class ReviewController extends Controller
      *
      * @return response
      */
-    public function massDestroy() {
+    public function massDestroy()
+    {
         $suppressFlash = false;
 
         if (request()->isMethod('post')) {
@@ -133,7 +129,7 @@ class ReviewController extends Controller
                 try {
                     Event::fire('customer.review.delete.before', $value);
 
-                    $this->productReview->delete($value);
+                    $this->productReviewRepository->delete($value);
 
                     Event::fire('customer.review.delete.after', $value);
                 } catch(\Exception $e) {
@@ -162,7 +158,8 @@ class ReviewController extends Controller
      *
      * @return response
      */
-    public function massUpdate() {
+    public function massUpdate()
+    {
         $suppressFlash = false;
 
         if (request()->isMethod('post')) {
@@ -171,7 +168,7 @@ class ReviewController extends Controller
             $indexes = explode(',', request()->input('indexes'));
 
             foreach ($indexes as $key => $value) {
-                $review = $this->productReview->findOneByField('id', $value);
+                $review = $this->productReviewRepository->findOneByField('id', $value);
 
                 try {
                     if ($data['massaction-type'] == 'update') {

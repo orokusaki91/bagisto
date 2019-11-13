@@ -11,8 +11,6 @@ class ProductAttributeValue extends Model implements ProductAttributeValueContra
 {
     public $timestamps = false;
 
-    protected $with = ['attribute'];
-
     /**
      * @var array
      */
@@ -25,6 +23,9 @@ class ProductAttributeValue extends Model implements ProductAttributeValueContra
         'multiselect' => 'text_value',
         'datetime' => 'datetime_value',
         'date' => 'date_value',
+        'file' => 'text_value',
+        'image' => 'text_value',
+        'checkbox' => 'text_value',
     ];
 
     protected $fillable = [

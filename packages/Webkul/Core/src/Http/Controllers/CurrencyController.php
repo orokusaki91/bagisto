@@ -2,10 +2,8 @@
 
 namespace Webkul\Core\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Event;
-use Webkul\Core\Repositories\CurrencyRepository as Currency;
+use Webkul\Core\Repositories\CurrencyRepository;
 
 /**
  * Currency controller
@@ -27,17 +25,17 @@ class CurrencyController extends Controller
      *
      * @var array
      */
-    protected $currency;
+    protected $currencyRepository;
 
     /**
      * Create a new controller instance.
      *
-     * @param  Webkul\Core\Repositories\CurrencyRepository $currency
+     * @param  \Webkul\Core\Repositories\CurrencyRepository $currencyRepository
      * @return void
      */
-    public function __construct(Currency $currency)
+    public function __construct(CurrencyRepository $currencyRepository)
     {
-        $this->currency = $currency;
+        $this->currencyRepository = $currencyRepository;
 
         $this->_config = request('_config');
     }
@@ -45,7 +43,7 @@ class CurrencyController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
     public function index()
     {
@@ -55,7 +53,7 @@ class CurrencyController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
     public function create()
     {
@@ -65,10 +63,9 @@ class CurrencyController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store()
     {
         $this->validate(request(), [
             'code' => 'required|min:3|max:3|unique:currencies,code',
@@ -77,11 +74,11 @@ class CurrencyController extends Controller
 
         Event::fire('core.channel.create.before');
 
-        $currency = $this->currency->create(request()->all());
+        $currency = $this->currencyRepository->create(request()->all());
 
         Event::fire('core.currency.create.after', $currency);
 
-        session()->flash('success', trans('admin::app.response.create-success', ['name' => 'Currency']));
+        session()->flash('success', trans('admin::app.settings.currencies.create-success'));
 
         return redirect()->route($this->_config['redirect']);
     }
@@ -90,11 +87,11 @@ class CurrencyController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
     public function edit($id)
     {
-        $currency = $this->currency->find($id);
+        $currency = $this->currencyRepository->findOrFail($id);
 
         return view($this->_config['view'], compact('currency'));
     }
@@ -102,11 +99,10 @@ class CurrencyController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update($id)
     {
         $this->validate(request(), [
             'code' => ['required', 'unique:currencies,code,' . $id, new \Webkul\Core\Contracts\Validations\Code],
@@ -115,11 +111,11 @@ class CurrencyController extends Controller
 
         Event::fire('core.currency.update.before', $id);
 
-        $currency = $this->currency->update(request()->all(), $id);
+        $currency = $this->currencyRepository->update(request()->all(), $id);
 
         Event::fire('core.currency.update.after', $currency);
 
-        session()->flash('success', trans('admin::app.response.update-success', ['name' => 'Currency']));
+        session()->flash('success', trans('admin::app.settings.currencies.update-success'));
 
         return redirect()->route($this->_config['redirect']);
     }
@@ -132,24 +128,27 @@ class CurrencyController extends Controller
      */
     public function destroy($id)
     {
-        try {
-            Event::fire('core.currency.delete.before', $id);
+        $currency = $this->currencyRepository->findOrFail($id);
 
-            $result = $this->currency->delete($id);
+        if ($this->currencyRepository->count() == 1) {
+            session()->flash('warning', trans('admin::app.settings.currencies.last-delete-error'));
+        } else {
+            try {
+                Event::fire('core.currency.delete.before', $id);
 
-            Event::fire('core.currency.delete.after', $id);
+                $this->currencyRepository->delete($id);
 
-            if($result)
-                session()->flash('success', trans('admin::app.response.delete-success', ['name' => 'Currency']));
-            else
-                session()->flash('error', trans('admin::app.response.last-delete-error', ['name' => 'Currency']));
-        } catch (\Exception $e) {
-            session()->flash('error', $e->getMessage());
+                Event::fire('core.currency.delete.after', $id);
 
-            session()->flash('error', trans('admin::app.response.currency-delete-error', ['name' => 'Currency']));
+                session()->flash('success', trans('admin::app.settings.currencies.delete-success'));
+
+                return response()->json(['message' => true], 200);
+            } catch (\Exception $e) {
+                session()->flash('error', trans('admin::app.response.delete-failed', ['name' => 'Currency']));
+            }
         }
 
-        return redirect()->back();
+        return response()->json(['message' => false], 400);
     }
 
     /**
@@ -167,7 +166,7 @@ class CurrencyController extends Controller
                 try {
                     Event::fire('core.currency.delete.before', $value);
 
-                    $this->currency->delete($value);
+                    $this->currencyRepository->delete($value);
 
                     Event::fire('core.currency.delete.after', $value);
                 } catch(\Exception $e) {

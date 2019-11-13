@@ -3,15 +3,11 @@
         @foreach ($menu->items as $menuItem)
             <li class="menu-item {{ $menu->getActive($menuItem) }}">
                 <a href="{{ count($menuItem['children']) ? current($menuItem['children'])['url'] : $menuItem['url'] }}">
-                    <span class="icon {{ $menuItem['icon-class'] }}">
-                    </span>
-                    {{ trans($menuItem['name']) }}
+                    <span class="icon {{ $menuItem['icon-class'] }}"></span>
+                    
+                    <span>{{ trans($menuItem['name']) }}</span>
                 </a>
             </li>
         @endforeach
     </ul>
-
-    {{-- <div class="open-nav-aside">
-        <i class="icon angle-right-icon open-icon"></i>
-    </div> --}}
 </div>

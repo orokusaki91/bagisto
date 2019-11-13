@@ -340,7 +340,7 @@ class Core
     */
     public function convertPrice($amount, $targetCurrencyCode = null)
     {
-        $targetCurrency = !$targetCurrencyCode
+        $targetCurrency = ! $targetCurrencyCode
                         ? $this->getCurrentCurrency()
                         : $this->currencyRepository->findOneByField('code', $targetCurrencyCode);
 
@@ -366,7 +366,7 @@ class Core
     */
     public function convertToBasePrice($amount, $targetCurrencyCode = null)
     {
-        $targetCurrency = !$targetCurrencyCode
+        $targetCurrency = ! $targetCurrencyCode
                         ? $this->getCurrentCurrency()
                         : $this->currencyRepository->findOneByField('code', $targetCurrencyCode);
 
@@ -394,9 +394,7 @@ class Core
         if (is_null($amount))
             $amount = 0;
 
-        $currencyCode = $this->getCurrentCurrency()->code;
-
-        return currency($this->convertPrice($amount), $currencyCode);
+        return $this->formatPrice($this->convertPrice($amount), $this->getCurrentCurrency()->code);
     }
 
     /**
@@ -407,17 +405,15 @@ class Core
     */
     public function currencySymbol($code)
     {
-        try {
-            return currency()->symbol($code);
-        } catch (\Exception $e) {
-            return $code;
-        }
+        $formatter = new \NumberFormatter(app()->getLocale() . '@currency=' . $code, \NumberFormatter::CURRENCY);
+
+        return $formatter->getSymbol(\NumberFormatter::CURRENCY_SYMBOL);
     }
 
     /**
     * Format and convert price with currency symbol
     *
-    * @param float $price
+    *  @param float $price
     *  @return string
     */
     public function formatPrice($price, $currencyCode)
@@ -425,13 +421,47 @@ class Core
         if (is_null($price))
             $price = 0;
 
-        return currency($price, $currencyCode);
+        $formater = new \NumberFormatter( app()->getLocale(), \NumberFormatter::CURRENCY );
+
+        if ($symbol = $this->getCurrentCurrency()->symbol) {
+            if ($this->currencySymbol($currencyCode) == $symbol) {
+                return $formater->formatCurrency($price, $currencyCode);
+            } else {
+                $formater->setSymbol(\NumberFormatter::CURRENCY_SYMBOL, $symbol);
+
+                return $formater->format($this->convertPrice($price));
+            }
+        } else {
+            return $formater->formatCurrency($price, $currencyCode);
+        }
+    }
+
+    /**
+    * Format and convert price with currency symbol
+    *
+    *  @return array
+    */
+    public function getAccountJsSymbols()
+    {
+        $formater = new \NumberFormatter( app()->getLocale(), \NumberFormatter::CURRENCY );
+
+        $pattern = $formater->getPattern();
+
+        $pattern = str_replace("¤", "%s", $pattern);
+
+        $pattern = str_replace("#,##0.00", "%v", $pattern);
+
+        return [
+            'symbol' => core()->currencySymbol(core()->getCurrentCurrencyCode()),
+            'decimal' => $formater->getSymbol(\NumberFormatter::DECIMAL_SEPARATOR_SYMBOL),
+            'format' => $pattern
+        ];
     }
 
     /**
     * Format price with base currency symbol
     *
-    * @param float $price
+    *  @param float $price
     *  @return string
     */
     public function formatBasePrice($price)
@@ -439,7 +469,19 @@ class Core
         if (is_null($price))
             $price = 0;
 
-        return currency($price, $this->getBaseCurrencyCode());
+        $formater = new \NumberFormatter( app()->getLocale(), \NumberFormatter::CURRENCY );
+
+        if ($symbol = $this->getBaseCurrency()->symbol) {
+            if ($this->currencySymbol($this->getBaseCurrencyCode()) == $symbol) {
+                return $formater->formatCurrency($price, $this->getBaseCurrencyCode());
+            } else {
+                $formater->setSymbol(\NumberFormatter::CURRENCY_SYMBOL, $symbol);
+
+                return $formater->format($this->convertPrice($price));
+            }
+        } else {
+            return $formater->formatCurrency($price, $this->getBaseCurrencyCode());
+        }
     }
 
     /**
@@ -597,6 +639,16 @@ class Core
     }
 
     /**
+     * Retrieve a group of information from the core config table
+     *
+     * @return array
+     */
+    public function retrieveGroupConfig($criteria)
+    {
+        return $criteria;
+    }
+
+    /**
      * Retrieve all countries
      *
      * @return Collection
@@ -604,6 +656,19 @@ class Core
     public function countries()
     {
         return $this->countryRepository->all();
+    }
+
+    /**
+     * Returns country name by code
+     *
+     * @param string $code
+     * @return string
+     */
+    public function country_name($code)
+    {
+        $country = $this->countryRepository->findOneByField('code', $code);
+
+        return $country ? $country->name : '';
     }
 
     /**
@@ -643,7 +708,7 @@ class Core
 
         $collection = $this->countryStateRepository->findByField(['country_code' => $countryCode, 'code' => $stateCode]);
 
-        if(count($collection)) {
+        if (count($collection)) {
             return $collection->first();
         } else {
             return false;
@@ -836,13 +901,30 @@ class Core
 		return $merged;
     }
 
-    public function convertEmptyStringsToNull($array) {
-        foreach($array as $key => $value) {
-            if($value == "" || $value == "null") {
+    public function convertEmptyStringsToNull($array)
+    {
+        foreach ($array as $key => $value) {
+            if ($value == "" || $value == "null") {
                 $array[$key] = null;
             }
         }
 
         return $array;
+    }
+
+    /**
+     * Create singletom object through single facade
+     *
+     * @param string $className
+     * @return object
+     */
+    public function getSingletonInstance($className)
+    {
+        static $instance = [];
+
+        if (array_key_exists($className, $instance))
+            return $instance[$className];
+
+        return $instance[$className] = app($className);
     }
 }

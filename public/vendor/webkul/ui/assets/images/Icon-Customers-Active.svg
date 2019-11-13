@@ -1,1 +1,12 @@
-<?xml version="1.0" standalone="no"?><!-- Generator: Gravit.io --><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="isolation:isolate" viewBox="0 0 48 48" width="48px" height="48px"><defs><clipPath id="_clipPath_Ge2NPJVgs6FzUE7V1Qh07yXGY6tq5yHB"><rect width="48" height="48"/></clipPath></defs><g clip-path="url(#_clipPath_Ge2NPJVgs6FzUE7V1Qh07yXGY6tq5yHB)"><g><path d=" M 9.069 38.879 C 9.79 31.482 16.026 25.7 23.613 25.7 C 31.2 25.7 37.436 31.482 38.157 38.879 L 9.069 38.879 Z  M 23.5 21.7 C 19.91 21.7 17 18.79 17 15.2 C 17 11.61 19.91 8.7 23.5 8.7 C 27.09 8.7 30 11.61 30 15.2 C 30 18.79 27.09 21.7 23.5 21.7 Z " fill-rule="evenodd" fill="none" vector-effect="non-scaling-stroke" stroke-width="2" stroke="rgb(255,153,0)" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="4"/></g></g></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50 (54983) - http://www.bohemiancoding.com/sketch -->
+    <title>Icon-Customers-Active</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Icon-Customers-Active" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g transform="translate(9.000000, 8.000000)" id="Combined-Shape" stroke="#0041FF" stroke-width="2">
+            <path d="M0.0694092808,30.8793785 C0.789639214,23.4815617 7.02613841,17.6997284 14.6130571,17.6997284 C22.1999758,17.6997284 28.436475,23.4815617 29.156705,30.8793785 L0.0694092808,30.8793785 Z M14.5,13.6997284 C10.9101491,13.6997284 8,10.7895793 8,7.19972838 C8,3.60987751 10.9101491,0.699728384 14.5,0.699728384 C18.0898509,0.699728384 21,3.60987751 21,7.19972838 C21,10.7895793 18.0898509,13.6997284 14.5,13.6997284 Z"></path>
+        </g>
+    </g>
+</svg>

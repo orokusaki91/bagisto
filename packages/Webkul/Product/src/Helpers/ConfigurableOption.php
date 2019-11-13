@@ -3,11 +3,15 @@
 namespace Webkul\Product\Helpers;
 
 use Webkul\Attribute\Repositories\AttributeOptionRepository as AttributeOption;
-use Webkul\Product\Helpers\ProductImage;
-use Webkul\Product\Helpers\Price;
 use Webkul\Product\Models\Product;
 use Webkul\Product\Models\ProductAttributeValue;
 
+/**
+ * Configurable Option Helper
+ *
+ * @author Jitendra Singh <jitendra@webkul.com>
+ * @copyright 2018 Webkul Software Pvt Ltd (http://www.webkul.com)
+ */
 class ConfigurableOption extends AbstractProduct
 {
     /**
@@ -25,31 +29,20 @@ class ConfigurableOption extends AbstractProduct
     protected $productImage;
 
     /**
-     * Price object
-     *
-     * @var array
-     */
-    protected $price;
-
-    /**
      * Create a new controller instance.
      *
      * @param  Webkul\Attribute\Repositories\AttributeOptionRepository $attributeOption
      * @param  Webkul\Product\Helpers\ProductImage                     $productImage
-     * @param  Webkul\Product\Helpers\Price                            $price
      * @return void
      */
     public function __construct(
         AttributeOption $attributeOption,
-        ProductImage $productImage,
-        Price $price
+        ProductImage $productImage
     )
     {
         $this->attributeOption = $attributeOption;
 
         $this->productImage = $productImage;
-
-        $this->price = $price;
     }
 
     /**
@@ -78,7 +71,7 @@ class ConfigurableOption extends AbstractProduct
      * Returns the allowed variants JSON
      *
      * @param Product $product
-     * @return float
+     * @return array
      */
     public function getConfigurationConfig($product)
     {
@@ -88,8 +81,8 @@ class ConfigurableOption extends AbstractProduct
             'attributes' => $this->getAttributesData($product, $options),
             'index' => isset($options['index']) ? $options['index'] : [],
             'regular_price' => [
-                'formated_price' => core()->currency($this->price->getMinimalPrice($product)),
-                'price' => $this->price->getMinimalPrice($product)
+                'formated_price' => core()->currency($product->getTypeInstance()->getMinimalPrice()),
+                'price' => $product->getTypeInstance()->getMinimalPrice()
             ],
             'variant_prices' => $this->getVariantPrices($product),
             'variant_images' => $this->getVariantImages($product),
@@ -107,7 +100,7 @@ class ConfigurableOption extends AbstractProduct
      */
     public function getAllowAttributes($product)
     {
-        return $product->super_attributes;
+        return $product->product->super_attributes;
     }
 
     /**
@@ -124,13 +117,19 @@ class ConfigurableOption extends AbstractProduct
         $allowAttributes = $this->getAllowAttributes($currentProduct);
 
         foreach ($allowedProducts as $product) {
-
-            $productId = $product->id;
+            if ($product instanceof \Webkul\Product\Models\ProductFlat) {
+                $productId = $product->product_id;
+            } else {
+                $productId = $product->id;
+            }
 
             foreach ($allowAttributes as $productAttribute) {
                 $productAttributeId = $productAttribute->id;
 
                 $attributeValue = $product->{$productAttribute->code};
+
+                if ($attributeValue == '' && $product instanceof \Webkul\Product\Models\ProductFlat)
+                    $attributeValue = $product->product->{$productAttribute->code};
 
                 $options[$productAttributeId][$attributeValue][] = $productId;
 
@@ -154,7 +153,9 @@ class ConfigurableOption extends AbstractProduct
 
         $attributes = [];
 
-        foreach ($product->super_attributes as $attribute) {
+        $allowAttributes = $this->getAllowAttributes($product);
+
+        foreach ($allowAttributes as $attribute) {
 
             $attributeOptionsData = $this->getAttributeOptionsData($attribute, $options);
 
@@ -164,7 +165,7 @@ class ConfigurableOption extends AbstractProduct
                 $attributes[] = [
                     'id' => $attributeId,
                     'code' => $attribute->code,
-                    'label' => $attribute->name,
+                    'label' => $attribute->name ? $attribute->name : $attribute->admin_name,
                     'swatch_type' => $attribute->swatch_type,
                     'options' => $attributeOptionsData
                 ];
@@ -211,16 +212,13 @@ class ConfigurableOption extends AbstractProduct
         $prices = [];
 
         foreach ($this->getAllowedProducts($product) as $variant) {
-            $prices[$variant->id] = [
-                'regular_price' => [
-                    'formated_price' => core()->currency($variant->price),
-                    'price' => $variant->price
-                ],
-                'final_price' => [
-                    'formated_price' => core()->currency($this->price->getMinimalPrice($variant)),
-                    'price' => $this->price->getMinimalPrice($variant)
-                ]
-            ];
+            if ($variant instanceof \Webkul\Product\Models\ProductFlat) {
+                $variantId = $variant->product_id;
+            } else {
+                $variantId = $variant->id;
+            }
+
+            $prices[$variantId] = $variant->getTypeInstance()->getProductPrices();
         }
 
         return $prices;
@@ -237,7 +235,13 @@ class ConfigurableOption extends AbstractProduct
         $images = [];
 
         foreach ($this->getAllowedProducts($product) as $variant) {
-            $images[$variant->id] = $this->productImage->getGalleryImages($variant);
+            if ($variant instanceof \Webkul\Product\Models\ProductFlat) {
+                $variantId = $variant->product_id;
+            } else {
+                $variantId = $variant->id;
+            }
+
+            $images[$variantId] = $this->productImage->getGalleryImages($variant);
         }
 
         return $images;

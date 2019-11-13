@@ -2,13 +2,9 @@
 
 namespace Webkul\Admin\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Event;
-use Webkul\Admin\Facades\Configuration;
-use Webkul\Core\Repositories\CoreConfigRepository as CoreConfig;
+use Webkul\Core\Repositories\CoreConfigRepository;
 use Webkul\Core\Tree;
-use Webkul\Admin\Http\Requests\ConfigurationForm;
 use Illuminate\Support\Facades\Storage;
 
 /**
@@ -31,7 +27,7 @@ class ConfigurationController extends Controller
      *
      * @var array
      */
-    protected $coreConfig;
+    protected $coreConfigRepository;
 
     /**
      *
@@ -42,14 +38,14 @@ class ConfigurationController extends Controller
     /**
      * Create a new controller instance.
      *
-     * @param  Webkul\Core\Repositories\CoreConfigRepository  $coreConfig
+     * @param  \Webkul\Core\Repositories\CoreConfigRepository $coreConfigRepository
      * @return void
      */
-    public function __construct(CoreConfig $coreConfig)
+    public function __construct(CoreConfigRepository $coreConfigRepository)
     {
         $this->middleware('admin');
 
-        $this->coreConfig = $coreConfig;
+        $this->coreConfigRepository = $coreConfigRepository;
 
         $this->_config = request('_config');
 
@@ -78,7 +74,7 @@ class ConfigurationController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
     public function index()
     {
@@ -98,32 +94,20 @@ class ConfigurationController extends Controller
      */
     public function getDefaultConfigSlugs()
     {
-        $slugs = [];
-
         if (! request()->route('slug')) {
             $firstItem = current($this->configTree->items);
             $secondItem = current($firstItem['children']);
 
-            $temp = explode('.', $secondItem['key']);
-
-            $slugs = [
-                'slug' => current($temp),
-                'slug2' => end($temp)
-            ];
-        } else {
-            if (! request()->route('slug2')) {
-                $secondItem = current($this->configTree->items[request()->route('slug')]['children']);
-
-                $temp = explode('.', $secondItem['key']);
-
-                $slugs = [
-                    'slug' => current($temp),
-                    'slug2' => end($temp)
-                ];
-            }
+            return $this->getSlugs($secondItem);
         }
 
-        return $slugs;
+        if (! request()->route('slug2')) {
+            $secondItem = current($this->configTree->items[request()->route('slug')]['children']);
+
+            return $this->getSlugs($secondItem);
+        }
+
+        return [];
     }
 
     /**
@@ -134,9 +118,9 @@ class ConfigurationController extends Controller
      */
     public function store()
     {
-        Event::fire('core.configuration.save.after');
+        Event::fire('core.configuration.save.before');
 
-        $this->coreConfig->create(request()->all());
+        $this->coreConfigRepository->create(request()->all());
 
         Event::fire('core.configuration.save.after');
 
@@ -156,8 +140,20 @@ class ConfigurationController extends Controller
 
         $fileName = 'configuration/'. $path;
 
-        $config = $this->coreConfig->findOneByField('value', $fileName);
+        $config = $this->coreConfigRepository->findOneByField('value', $fileName);
 
         return Storage::download($config['value']);
+    }
+
+    /**
+     * @param $secondItem
+     *
+     * @return array
+     */
+    private function getSlugs($secondItem): array
+    {
+        $temp = explode('.', $secondItem['key']);
+
+        return ['slug' => current($temp), 'slug2' => end($temp)];
     }
 }

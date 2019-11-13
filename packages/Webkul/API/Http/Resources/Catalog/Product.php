@@ -13,9 +13,9 @@ class Product extends JsonResource
      */
     public function __construct($resource)
     {
-        $this->productPriceHelper = app('Webkul\Product\Helpers\Price');
-
         $this->productImageHelper = app('Webkul\Product\Helpers\ProductImage');
+
+        $this->productReviewHelper = app('Webkul\Product\Helpers\Review');
 
         parent::__construct($resource);
     }
@@ -34,8 +34,10 @@ class Product extends JsonResource
             'id' => $product->id,
             'type' => $product->type,
             'name' => $this->name,
-            'price' => $this->price,
-            'formated_price' => core()->currency($this->price),
+            'url_key' => $this->url_key,
+            'price' => $product->getTypeInstance()->getMinimalPrice(),
+            'formated_price' => core()->currency($product->getTypeInstance()->getMinimalPrice()),
+            'short_description' => $this->short_description,
             'description' => $this->description,
             'sku' => $this->sku,
             'images' => ProductImage::collection($product->images),
@@ -46,13 +48,20 @@ class Product extends JsonResource
                 'super_attributes' => Attribute::collection($product->super_attributes),
             ]),
             'special_price' => $this->when(
-                    $this->productPriceHelper->haveSpecialPrice($product),
-                    $this->productPriceHelper->getSpecialPrice($product)
+                    $product->getTypeInstance()->haveSpecialPrice(),
+                    $product->getTypeInstance()->getSpecialPrice()
                 ),
             'formated_special_price' => $this->when(
-                    $this->productPriceHelper->haveSpecialPrice($product),
-                    core()->currency($this->productPriceHelper->getSpecialPrice($product))
+                    $product->getTypeInstance()->haveSpecialPrice(),
+                    core()->currency($product->getTypeInstance()->getSpecialPrice())
                 ),
+            'reviews' => [
+                'total' => $total = $this->productReviewHelper->getTotalReviews($product),
+                'total_rating' => $total ? $this->productReviewHelper->getTotalRating($product) : 0,
+                'average_rating' => $total ? $this->productReviewHelper->getAverageRating($product) : 0,
+                'percentage' => $total ? json_encode($this->productReviewHelper->getPercentageRating($product)) : [],
+            ],
+            'is_saved' => false,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

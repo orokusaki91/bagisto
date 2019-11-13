@@ -1,1 +1,11 @@
-<?xml version="1.0" standalone="no"?><!-- Generator: Gravit.io --><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="isolation:isolate" viewBox="0 0 24 24" width="24px" height="24px"><defs><clipPath id="_clipPath_sGB1LvWEc6oECO1uADkRoK8OUGMb3DUu"><rect width="24" height="24"/></clipPath></defs><g clip-path="url(#_clipPath_sGB1LvWEc6oECO1uADkRoK8OUGMb3DUu)"><path d="M 3 1 L 21 1 C 22.104 1 23 1.896 23 3 L 23 21 C 23 22.104 22.104 23 21 23 L 3 23 C 1.896 23 1 22.104 1 21 L 1 3 C 1 1.896 1.896 1 3 1 Z" style="stroke:none;fill:#FFFFFF;stroke-miterlimit:10;"/><path d="M 3 1 L 21 1 C 22.104 1 23 1.896 23 3 L 23 21 C 23 22.104 22.104 23 21 23 L 3 23 C 1.896 23 1 22.104 1 21 L 1 3 C 1 1.896 1.896 1 3 1 Z" style="fill:none;stroke:#FF9900;stroke-width:2;stroke-miterlimit:2;"/><rect x="6.5" y="10.5" width="11" height="3" transform="matrix(1,0,0,1,0,0)" fill="rgb(255,153,0)"/></g></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51 (57462) - http://www.bohemiancoding.com/sketch -->
+    <title>Checkbox-Dash</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Checkbox-Dash" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="Base" stroke="#0041FF" stroke-width="2" fill="#FFFFFF" x="1" y="1" width="22" height="22" rx="2"></rect>
+        <path d="M6,12 L17.215332,12" id="Path-8" stroke="#0041FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+    </g>
+</svg>
