@@ -638,7 +638,7 @@ return [
                 'subject' => 'Subscription Email',
                 'greeting' => ' Welcome to ' . config('app.name') . ' - Email Subscription',
                 'unsubscribe' => 'Unsubscribe',
-                'summary' => 'Thanks for putting me into your inbox. It’s been a while since you’ve read ' . config('app.name') . ' email, and we don’t want to overwhelm your inbox. If you still do not want to receive
+                'summary' => 'Thanks for putting us into your inbox. It’s been a while since you’ve read ' . config('app.name') . ' email, and we don’t want to overwhelm your inbox. If you still do not want to receive
                 the latest email marketing news then for sure click the button below.'
             ]
         ]

@@ -9,10 +9,6 @@
 	background: #333 !important;
 }
 
-.navbar-left {
-	top: 40px !important;
-}
-
 .navbar-top .navbar-top-left .brand-logo {
 	padding:7px 10px;
 }
@@ -103,7 +99,8 @@
 	padding:5px;
 }
 
-.image-wrapper .image-item.has-image, .image-wrapper .image-item img.preview {
+.image-wrapper .image-item.has-image, .image-wrapper .image-item img.preview,
+.image-wrapper .image-item {
 	cursor: pointer !important;
 }
 
