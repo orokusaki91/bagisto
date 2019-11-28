@@ -273,6 +273,10 @@ section.product-detail div.layouter .form-container .details .accordian .accordi
 	color: #f90;
 }
 
+section.slider-block div.slider-content ul.slider-images li img {
+	width: 100% !important;
+}
+
 /********* Media Queries **********/
 @media screen and (max-width: 768px) {
 	.header .header-bottom .nav a {
